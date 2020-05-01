@@ -19,19 +19,19 @@ public class User {
     @Column(name="id")
     private Integer id;
 
-    @Column(name="name_user")
+    @Column(name="user_name")
     private String name;
 
-    @Column(name = "lastname")
+    @Column(name = "user_lastname")
     private String lastname;
 
-    @Column(name = "identification_card")
-    private Integer identification;
+    @Column(name = "user_idcard")
+    private Integer idcard;
 
-    @Column(name = "password_user")
+    @Column(name = "user_password")
     private String password;
 
-    @Column(name = "type_user")
+    @Column(name = "user_type")
     private String type;
 
     @ManyToOne
@@ -39,12 +39,11 @@ public class User {
     private City city;
 
     public boolean hasNullAtribute(){
-        if (Stream.of(name, lastname,identification,password,city).anyMatch(x -> x == null)) {
+        if (Stream.of(name,lastname,idcard,password,city).anyMatch(x -> x == null)) {
             return true;
         }else{
             return false;
         }
     }
-
 }
 

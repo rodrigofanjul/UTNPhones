@@ -26,7 +26,7 @@ public class UserController {
     @PostMapping(value = "/login/")
     public User login(@RequestBody @NotNull User user) throws ParametersException, NumberFormatException, UserDoesntExistException {
         User u;
-        if (user.getIdentification()==null || user.getPassword()==null){
+        if (user.getIdcard()==null || user.getPassword()==null){
             throw new ParametersException();
         }else{
             u = userService.Login(user);
