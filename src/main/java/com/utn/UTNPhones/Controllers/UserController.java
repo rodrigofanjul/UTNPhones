@@ -1,8 +1,8 @@
 package com.utn.UTNPhones.Controllers;
 
-import com.utn.UTNPhones.Exceptions.ParametersException;
-import com.utn.UTNPhones.Exceptions.UserDoesntExistException;
-import com.utn.UTNPhones.Exceptions.UserExistsException;
+import com.utn.UTNPhones.Exceptions.NullArgumentException;
+import com.utn.UTNPhones.Exceptions.NotFoundException;
+import com.utn.UTNPhones.Exceptions.AlreadyExistsException;
 import com.utn.UTNPhones.Models.User;
 import com.utn.UTNPhones.Services.Interfaces.IUserService;
 import org.hibernate.exception.ConstraintViolationException;
@@ -24,30 +24,23 @@ public class UserController {
     }
 
     @PostMapping(value = "/login/")
-    public User login(@RequestBody @NotNull User user) throws ParametersException, NumberFormatException, UserDoesntExistException {
+    public User login(@RequestBody @NotNull User user) throws NullArgumentException, NumberFormatException, NotFoundException {
+        if (user.hasNullAtribute()) throw new NullArgumentException("user");
         User u;
-        if (user.getIdcard()==null || user.getPassword()==null){
-            throw new ParametersException();
-        }else{
-            u = userService.Login(user);
-        }
-         return u;
+        u = userService.Login(user);
+        return u;
     }
 
     @PostMapping("/register/")
-    public User register(@RequestBody @NotNull User user) throws ParametersException, UserExistsException {
-       if (user.hasNullAtribute()){
-          throw new ParametersException();
-       }else{
-           try {
-               userService.Register(user);
-           } catch (DataAccessException th) {
-
-               ConstraintViolationException cve= (ConstraintViolationException) th.getCause();
-
-               throw new UserExistsException();
-           }
-       }
+    public User register(@RequestBody @NotNull User user) throws NullArgumentException, AlreadyExistsException {
+        if (user.hasNullAtribute()) throw new NullArgumentException("user");
+        try {
+           userService.Register(user);
+        }
+        catch (DataAccessException th) {
+           ConstraintViolationException cve = (ConstraintViolationException) th.getCause();
+           throw new AlreadyExistsException("user",user.getId());
+        }
         return user;
     }
 }

@@ -6,18 +6,21 @@ import javax.persistence.*;
 import java.util.stream.Stream;
 
 @Entity
-@Table(name="users")
+@Table(name="Users")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @ToString
 @Builder
 public class User {
-
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="id")
     private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "id_city")
+    private City city;
 
     @Column(name="user_name")
     private String name;
@@ -33,10 +36,6 @@ public class User {
 
     @Column(name = "user_type")
     private String type;
-
-    @ManyToOne
-    @JoinColumn(name = "id_city")
-    private City city;
 
     public boolean hasNullAtribute(){
         if (Stream.of(name,lastname,idcard,password,city).anyMatch(x -> x == null)) {

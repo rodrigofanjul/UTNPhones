@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.stream.Stream;
 
 @Entity
-@Table(name="provinces")
+@Table(name="Provinces")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

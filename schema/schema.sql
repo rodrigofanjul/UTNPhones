@@ -45,8 +45,8 @@ CREATE TABLE Phonelines(
 	id INT AUTO_INCREMENT,
 	id_user INT,
 	id_city INT,
-	line_number INT UNIQUE NOT NULL,
-	line_type enum("mobile", "landline") NOT NULL,
+	phoneline_number INT UNIQUE NOT NULL,
+	phoneline_type enum("mobile", "landline") NOT NULL,
 	CONSTRAINT pk_phonelines PRIMARY KEY (id),
 	CONSTRAINT fk_phonelines_user FOREIGN KEY(id_user) REFERENCES Users(id),
 	CONSTRAINT fk_phonelines_city FOREIGN KEY(id_city) REFERENCES Cities(id)
