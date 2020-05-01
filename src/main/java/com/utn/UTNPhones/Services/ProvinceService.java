@@ -1,12 +1,12 @@
 package com.utn.UTNPhones.Services;
 
 import com.utn.UTNPhones.Repositories.IProvinceRepository;
-import com.utn.UTNPhones.Services.interfaces.IProvineService;
+import com.utn.UTNPhones.Services.Interfaces.IProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ProvinceService implements IProvineService {
+public class ProvinceService implements IProvinceService {
 
     private final IProvinceRepository provinceRepository;
 

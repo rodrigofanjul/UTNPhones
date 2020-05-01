@@ -1,6 +1,6 @@
 package com.utn.UTNPhones.Controllers;
 
-import com.utn.UTNPhones.Services.interfaces.IProvineService;
+import com.utn.UTNPhones.Services.Interfaces.IProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/province")
 public class ProvinceController {
 
-    private final IProvineService invoiceService;
+    private final IProvinceService provinceService;
 
     @Autowired
-    public ProvinceController(IProvineService invoiceService) {
-        this.invoiceService = invoiceService;
+    public ProvinceController(IProvinceService provinceService) {
+        this.provinceService = provinceService;
     }
 }
