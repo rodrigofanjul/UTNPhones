@@ -25,7 +25,7 @@ public class UserService implements IUserService {
         return Optional.ofNullable(u).orElseThrow(() -> new NotFoundException("user",user.getId()));
     }
 
-    public User Register(User user) throws DataAccessException {
+    public User Register(final User user) throws DataAccessException {
         userRepository.save(user);
         return user;
     }

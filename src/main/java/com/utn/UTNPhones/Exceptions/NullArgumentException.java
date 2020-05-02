@@ -2,7 +2,7 @@ package com.utn.UTNPhones.Exceptions;
 
 public class NullArgumentException extends Exception{
 
-    public NullArgumentException(String type){
-        super(String.format("An argument in resource {%s} cannot be null.", type));
+    public NullArgumentException(){
+        super(String.format("An argument cannot be null."));
     }
 }

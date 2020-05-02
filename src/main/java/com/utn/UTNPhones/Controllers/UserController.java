@@ -24,16 +24,16 @@ public class UserController {
     }
 
     @PostMapping(value = "/login/")
-    public User login(@RequestBody @NotNull User user) throws NullArgumentException, NumberFormatException, NotFoundException {
-        if (user.hasNullAtribute()) throw new NullArgumentException("user");
+    public User Login(@RequestBody @NotNull User user) throws NullArgumentException, NumberFormatException, NotFoundException {
+        if (user.hasNullAtribute()) throw new NullArgumentException();
         User u;
         u = userService.Login(user);
         return u;
     }
 
     @PostMapping("/register/")
-    public User register(@RequestBody @NotNull User user) throws NullArgumentException, AlreadyExistsException {
-        if (user.hasNullAtribute()) throw new NullArgumentException("user");
+    public User Register(@RequestBody @NotNull User user) throws NullArgumentException, AlreadyExistsException {
+        if (user.hasNullAtribute()) throw new NullArgumentException();
         try {
            userService.Register(user);
         }
