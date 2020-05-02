@@ -11,13 +11,13 @@ Se puede registrar un nuevo usuario enviando la siguiente Request al servidor:
 > POST localhost:8080/user/register/
 
     {
-   		"name": "Rodrigo",
-   		"lastname": "Fanjul",  
-   		"idcard": 38831866,  
-   		"password": "123",
-   		"type": "user",
-   		"city":
-   		{
-			"id": 16501
-   		}
+   	    "name": "Rodrigo",
+   	    "lastname": "Fanjul",  
+   	    "idcard": 38831866,  
+   	    "password": "123",
+   	    "type": "user",
+   	    "city":
+   	    {
+	        "id": 16501
+   	    }
     }
