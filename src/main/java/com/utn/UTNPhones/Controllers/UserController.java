@@ -38,7 +38,7 @@ public class UserController {
     //Chequeo si es @Valid, para poder corroborar que los @NotNull del modelo se cumplen, sino mando una excepcion
     @PostMapping("/register/")
     public User Register(@Valid @RequestBody @NotNull User user, Errors errors) throws NullArgumentException, AlreadyExistsException {
-        if (errors.hasErrors()) throw new NullArgumentException();
+        if (errors.hasErrors()) throw new NullArgumentException(errors);
         userService.Register(user);
         return user;
     }
