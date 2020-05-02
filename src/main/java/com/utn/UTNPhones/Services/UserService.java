@@ -1,5 +1,6 @@
 package com.utn.UTNPhones.Services;
 
+import com.utn.UTNPhones.Exceptions.AlreadyExistsException;
 import com.utn.UTNPhones.Exceptions.NotFoundException;
 import com.utn.UTNPhones.Models.User;
 import com.utn.UTNPhones.Repositories.IUserRepository;
@@ -25,8 +26,13 @@ public class UserService implements IUserService {
         return Optional.ofNullable(u).orElseThrow(() -> new NotFoundException("user",user.getId()));
     }
 
-    public User Register(final User user) throws DataAccessException {
-        userRepository.save(user);
+    public User Register(final User user) throws AlreadyExistsException {
+        try {
+            userRepository.save(user);
+        }
+        catch (Exception e) {
+            throw new AlreadyExistsException("user",0);
+        }
         return user;
     }
 }
