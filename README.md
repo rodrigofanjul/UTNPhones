@@ -21,3 +21,12 @@ Se puede registrar un nuevo usuario enviando la siguiente Request al servidor:
 	        "id": 16501
    	    }
     }
+
+Se puede loguearse enviando la siguiente Request al servidor:
+
+> POST localhost:8080/user/login/
+
+    {
+   	    "idcard": 38831866,  
+   	    "password": "123"
+    }
