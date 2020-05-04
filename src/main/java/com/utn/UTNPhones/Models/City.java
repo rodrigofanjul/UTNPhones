@@ -3,6 +3,7 @@ package com.utn.UTNPhones.Models;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.stream.Stream;
 
 @Entity
@@ -20,19 +21,14 @@ public class City {
 
     @ManyToOne
     @JoinColumn(name = "id_province")
+    @NotNull
     private Province province;
 
     @Column(name="city_name")
+    @NotNull
     private String name;
 
     @Column(name="city_prefix")
+    @NotNull
     private Integer prefix;
-
-    public boolean hasNullAtribute(){
-        if (Stream.of(name,prefix,province).anyMatch(x -> x == null)) {
-            return true;
-        }else{
-            return false;
-        }
-    }
 }

@@ -3,6 +3,7 @@ package com.utn.UTNPhones.Models;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.stream.Stream;
 
 @Entity
@@ -19,13 +20,6 @@ public class Province {
     private Integer id;
 
     @Column(name="province_name")
+    @NotNull
     private String name;
-
-    public boolean hasNullAtribute(){
-        if (Stream.of(name).anyMatch(x -> x == null)) {
-            return true;
-        }else{
-            return false;
-        }
-    }
 }

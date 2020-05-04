@@ -3,6 +3,7 @@ package com.utn.UTNPhones.Models;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.stream.Stream;
 
@@ -21,6 +22,7 @@ public class Call {
 
     @ManyToOne
     @JoinColumn(name = "id_rate")
+    @NotNull
     private Rate rate;
 
     @ManyToOne
@@ -29,29 +31,27 @@ public class Call {
 
     @ManyToOne
     @JoinColumn(name = "id_line_origin")
+    @NotNull
     private Phoneline originPhoneline;
 
     @ManyToOne
     @JoinColumn(name = "id_line_destination")
+    @NotNull
     private Phoneline destinationPhoneline;
 
     @Column(name = "call_date")
+    @NotNull
     private Date date;
 
     @Column(name = "call_price")
+    @NotNull
     private Integer price;
 
     @Column(name = "call_duration")
+    @NotNull
     private Integer duration;
 
     @Column(name = "call_totalprice")
+    @NotNull
     private Integer totalPrice;
-
-    public boolean hasNullAtribute(){
-        if (Stream.of(originPhoneline,destinationPhoneline,rate,date,price,duration,totalPrice).anyMatch(x -> x == null)) {
-            return true;
-        }else{
-            return false;
-        }
-    }
 }

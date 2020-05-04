@@ -3,6 +3,7 @@ package com.utn.UTNPhones.Models;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.stream.Stream;
 
@@ -21,31 +22,30 @@ public class Invoice {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_phoneline")
+    @NotNull
     private Phoneline phoneline;
 
     @Column(name = "invoice_calls_quantity")
+    @NotNull
     private Integer callsQuantity;
 
     @Column(name = "invoice_cost_price")
+    @NotNull
     private Integer costPrice;
 
     @Column(name = "invoice_totalprice")
+    @NotNull
     private Integer totalPrice;
 
     @Column(name = "invoice_date")
+    @NotNull
     private Date date;
 
     @Column(name = "invoice_is_paid")
+    @NotNull
     private Boolean isPaid;
 
     @Column(name = "invoice_expiration_date")
+    @NotNull
     private Date expirationDate;
-
-    public boolean hasNullAtribute(){
-        if (Stream.of(phoneline,callsQuantity,costPrice,totalPrice,isPaid,date,expirationDate).anyMatch(x -> x == null)) {
-            return true;
-        }else{
-            return false;
-        }
-    }
 }
