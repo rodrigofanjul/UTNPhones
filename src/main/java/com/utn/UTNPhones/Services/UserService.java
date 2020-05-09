@@ -1,14 +1,19 @@
 package com.utn.UTNPhones.Services;
 
 import com.utn.UTNPhones.Exceptions.AlreadyExistsException;
+import com.utn.UTNPhones.Exceptions.IncorrectPasswordException;
 import com.utn.UTNPhones.Exceptions.NotFoundException;
 import com.utn.UTNPhones.Models.User;
 import com.utn.UTNPhones.Repositories.IUserRepository;
 import com.utn.UTNPhones.Services.Interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Optional;
 
 @Service
@@ -21,18 +26,17 @@ public class UserService implements IUserService {
         this.userRepository = userRepository;
     }
 
-    public User Login(User user) throws NotFoundException {
-        User u = userRepository.findByIdcardAndPassword(user.getIdcard(), user.getPassword());
-        return Optional.ofNullable(u).orElseThrow(() -> new NotFoundException("user",user.getId()));
+    public User loginUser(User user) throws NotFoundException {
+        User u = userRepository.findByIdcard(user.getIdcard());
+        return Optional.ofNullable(u).orElseThrow(() -> new NotFoundException());
     }
 
-    public User Register(final User user) throws AlreadyExistsException {
-        try {
-            userRepository.save(user);
-        }
-        catch (Exception e) {
-            throw new AlreadyExistsException("user",0);
-        }
-        return user;
+    public User registerUser(User user) throws AlreadyExistsException, DataAccessException {
+        return userRepository.save(user);
+    }
+
+    public User updateUser(int id, User user) {
+        user.setId(id);
+        return userRepository.save(user);
     }
 }

@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.stream.Stream;
 
 @Entity
-@Table(name="Invoices")
+@Table(name="invoices")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -22,30 +22,30 @@ public class Invoice {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_phoneline")
-    @NotNull
+    @NotNull(message = "Provide phoneline {id}")
     private Phoneline phoneline;
 
     @Column(name = "invoice_calls_quantity")
-    @NotNull
+    @NotNull(message = "Provide callsQuantity (Integer)")
     private Integer callsQuantity;
 
     @Column(name = "invoice_cost_price")
-    @NotNull
+    @NotNull(message = "Provide costPrice (Integer)")
     private Integer costPrice;
 
     @Column(name = "invoice_totalprice")
-    @NotNull
+    @NotNull(message = "Provide totalPrice (Integer)")
     private Integer totalPrice;
 
     @Column(name = "invoice_date")
-    @NotNull
+    @NotNull(message = "Provide date (Date)")
     private Date date;
 
     @Column(name = "invoice_is_paid")
-    @NotNull
+    @NotNull(message = "Provide isPaid (Boolean)")
     private Boolean isPaid;
 
     @Column(name = "invoice_expiration_date")
-    @NotNull
+    @NotNull(message = "Provide expirationDate (Date)")
     private Date expirationDate;
 }

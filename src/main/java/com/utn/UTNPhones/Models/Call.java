@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.stream.Stream;
 
 @Entity
-@Table(name="Calls")
+@Table(name="calls")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -22,7 +22,6 @@ public class Call {
 
     @ManyToOne
     @JoinColumn(name = "id_rate")
-    @NotNull
     private Rate rate;
 
     @ManyToOne
@@ -31,27 +30,24 @@ public class Call {
 
     @ManyToOne
     @JoinColumn(name = "id_line_origin")
-    @NotNull
-    private Phoneline originPhoneline;
+    @NotNull(message = "Provide origin {id}")
+    private Phoneline origin;
 
     @ManyToOne
     @JoinColumn(name = "id_line_destination")
-    @NotNull
-    private Phoneline destinationPhoneline;
+    @NotNull(message = "Provide destination {id}")
+    private Phoneline destination;
 
     @Column(name = "call_date")
-    @NotNull
     private Date date;
 
     @Column(name = "call_price")
-    @NotNull
     private Integer price;
 
     @Column(name = "call_duration")
-    @NotNull
+    @NotNull(message = "Provide duration (seconds)")
     private Integer duration;
 
     @Column(name = "call_totalprice")
-    @NotNull
     private Integer totalPrice;
 }

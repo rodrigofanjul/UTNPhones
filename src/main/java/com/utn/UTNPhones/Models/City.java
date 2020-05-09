@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.stream.Stream;
 
 @Entity
-@Table(name="Cities")
+@Table(name="cities")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -21,14 +21,14 @@ public class City {
 
     @ManyToOne
     @JoinColumn(name = "id_province")
-    @NotNull
+    @NotNull(message = "Provide province {id}")
     private Province province;
 
     @Column(name="city_name")
-    @NotNull
+    @NotNull(message = "Provide name (String)")
     private String name;
 
     @Column(name="city_prefix")
-    @NotNull
+    @NotNull(message = "Provide prefix (Integer)")
     private Integer prefix;
 }

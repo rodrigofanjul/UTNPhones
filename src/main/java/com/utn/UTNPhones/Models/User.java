@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.stream.Stream;
 
 @Entity
-@Table(name="Users")
+@Table(name="users")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -21,27 +21,32 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "id_city")
-    @NotNull
+    @NotNull(message = "Provide city {id}")
     private City city;
 
     @Column(name="user_name")
-    @NotNull
+    @NotNull(message = "Provide name (String)")
     private String name;
 
     @Column(name = "user_lastname")
-    @NotNull
+    @NotNull(message = "Provide lastname (String)")
     private String lastname;
 
     @Column(name = "user_idcard")
-    @NotNull
+    @NotNull(message = "Provide idcard (Integer)")
     private Integer idcard;
 
     @Column(name = "user_password")
-    @NotNull
+    @NotNull(message = "Provide password (String)")
     private String password;
 
+    public enum Type {
+        user, employee;
+    }
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_type")
-    @NotNull
-    private String type;
+    @NotNull(message = "Provide type (user/employee)")
+    private Type type;
 }
 

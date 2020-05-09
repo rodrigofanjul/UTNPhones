@@ -2,12 +2,12 @@ DROP DATABASE IF EXISTS UTNPhones;
 CREATE DATABASE IF NOT EXISTS UTNPhones;
 USE UTNPhones;
 
-CREATE TABLE Provinces(
+CREATE TABLE provinces(
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	province_name VARCHAR(30) UNIQUE NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE Cities(
+CREATE TABLE cities(
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	id_province INT,
 	city_name VARCHAR(50) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE Cities(
 	CONSTRAINT fk_cities_province FOREIGN KEY (id_province) REFERENCES Provinces(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE Rates(
+CREATE TABLE rates(
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	id_origin_city INT,
 	id_destination_city INT,
@@ -26,30 +26,30 @@ CREATE TABLE Rates(
 	UNIQUE key unq_rates_origin_destination (id_origin_city,id_destination_city)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE Users(
+CREATE TABLE users(
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	id_city INT,
 	user_name VARCHAR(45) NOT NULL,
 	user_lastname VARCHAR(45) NOT NULL,
 	user_idcard INT NOT NULL UNIQUE,
-	user_password VARCHAR(30) NOT NULL,
-	user_type enum("user", "employee") NOT NULL,
+	user_password VARCHAR(200) NOT NULL,
+	user_type ENUM("user", "employee") NOT NULL,
 	CONSTRAINT fk_users_city FOREIGN KEY(id_city) REFERENCES Cities(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE Phonelines(
-	id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE phonelines(
+	id BIGINT PRIMARY KEY,
 	id_user INT,
 	id_city INT,
-	phoneline_type enum("mobile", "landline") NOT NULL,
-	phoneline_active BOOLEAN,
+	phoneline_type ENUM("mobile", "landline") NOT NULL,
+	phoneline_status ENUM("active", "suspended", "cancelled") NOT NULL,
 	CONSTRAINT fk_phonelines_user FOREIGN KEY(id_user) REFERENCES Users(id),
 	CONSTRAINT fk_phonelines_city FOREIGN KEY(id_city) REFERENCES Cities(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE Invoices(
+CREATE TABLE invoices(
 	id INT AUTO_INCREMENT PRIMARY KEY,
-    id_phoneline INT,
+    id_phoneline BIGINT,
     invoice_calls_quantity INT NOT NULL,
     invoice_cost_price FLOAT NOT NULL,
     invoice_totalprice FLOAT NOT NULL,
@@ -59,14 +59,14 @@ CREATE TABLE Invoices(
     CONSTRAINT fk_users_phoneline FOREIGN KEY(id_phoneline) REFERENCES Phonelines(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE Calls(
+CREATE TABLE calls(
 	id INT AUTO_INCREMENT PRIMARY KEY,
     id_rate INT,
 	id_invoice INT,
-	id_line_origin INT NOT NULL,
-	id_line_destination INT NOT NULL,
+	id_line_origin BIGINT,
+	id_line_destination BIGINT,
     call_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,	
-    call_price INT,
+    call_rate INT,
     call_duration INT,
     call_totalprice INT,
     CONSTRAINT fk_calls_rate FOREIGN KEY(id_rate) REFERENCES Rates(id),

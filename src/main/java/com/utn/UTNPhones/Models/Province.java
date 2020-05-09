@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.stream.Stream;
 
 @Entity
-@Table(name="Provinces")
+@Table(name="provinces")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -20,6 +20,6 @@ public class Province {
     private Integer id;
 
     @Column(name="province_name")
-    @NotNull
+    @NotNull(message = "Provide name (String)")
     private String name;
 }

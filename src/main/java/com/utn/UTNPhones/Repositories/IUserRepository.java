@@ -4,5 +4,5 @@ import com.utn.UTNPhones.Models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IUserRepository extends JpaRepository<User, Integer> {
-    User findByIdcardAndPassword(Integer idcard, String password);
+    User findByIdcard(int idcard);
 }

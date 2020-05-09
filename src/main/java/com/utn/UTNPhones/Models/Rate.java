@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.stream.Stream;
 
 @Entity
-@Table(name="Rates")
+@Table(name="rates")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -21,15 +21,15 @@ public class Rate {
 
     @ManyToOne
     @JoinColumn(name = "id_origin_city")
-    @NotNull
-    private City originCity;
+    @NotNull(message = "Provide origin {id}")
+    private City origin;
 
     @ManyToOne
     @JoinColumn(name = "id_destination_city")
-    @NotNull
-    private City destinationCity;
+    @NotNull(message = "Provide destination {id}")
+    private City destination;
 
     @Column(name = "rate_per_minute")
-    @NotNull
-    private Integer perMinute;
+    @NotNull(message = "Provide rate (Float)")
+    private Float rate;
 }
