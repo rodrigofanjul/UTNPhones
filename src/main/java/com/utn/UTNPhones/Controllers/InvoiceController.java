@@ -1,15 +1,11 @@
 package com.utn.UTNPhones.Controllers;
 
-import com.utn.UTNPhones.Exceptions.NotFoundException;
-import com.utn.UTNPhones.Models.Call;
 import com.utn.UTNPhones.Models.Invoice;
-import com.utn.UTNPhones.Models.User;
 import com.utn.UTNPhones.Services.Interfaces.IInvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -24,8 +20,9 @@ public class InvoiceController {
     }
 
     @GetMapping("")
-    public List<Invoice> getAll() throws NotFoundException {
-        List<Invoice> invoice = invoiceService.getAll();
-        return invoice;
+    public ResponseEntity<Object> getAll() {
+        List<Invoice> invoices = invoiceService.getAll();
+        if (invoices == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(invoices);
     }
 }

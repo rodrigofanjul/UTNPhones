@@ -1,53 +1,50 @@
 package com.utn.UTNPhones.Services;
 
-import com.utn.UTNPhones.Exceptions.AlreadyExistsException;
-import com.utn.UTNPhones.Exceptions.NotFoundException;
+import com.utn.UTNPhones.Exceptions.ResourceNotFoundException;
 import com.utn.UTNPhones.Models.Call;
 import com.utn.UTNPhones.Models.Phoneline;
 import com.utn.UTNPhones.Models.User;
 import com.utn.UTNPhones.Repositories.ICallRepository;
 import com.utn.UTNPhones.Services.Interfaces.ICallService;
+import com.utn.UTNPhones.Services.Interfaces.IPhonelineService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CallService implements ICallService {
 
     private final ICallRepository callRepository;
+    private final IPhonelineService phonelineService;
 
     @Autowired
-    public CallService(ICallRepository callRepository) {
+    public CallService(ICallRepository callRepository, IPhonelineService phonelineService) {
         this.callRepository = callRepository;
+        this.phonelineService = phonelineService;
     }
 
-    public List<Call> getUserCalls(User user) throws NotFoundException {
-        Phoneline tempPhoneline = new Phoneline();
-        tempPhoneline.setUser(user);
-        List<Call> c = callRepository.findByOrigin(tempPhoneline);
-        return Optional.ofNullable(c).orElseThrow(() -> new NotFoundException());
+    public List<Call> getUserCalls(User user) {
+        Phoneline phoneline = phonelineService.getByUser(user);
+        return callRepository.findByOrigin(phoneline);
     }
 
-    public List<Call> getUserCallsBetween(User user, Date start, Date end) throws NotFoundException {
-        Phoneline tempPhoneline = new Phoneline();
-        tempPhoneline.setUser(user);
-        List<Call> c = callRepository.findByOriginAndDateBetween(tempPhoneline,start,end);
-        return Optional.ofNullable(c).orElseThrow(() -> new NotFoundException());
+    public List<Call> getUserCallsBetween(User user, Date start, Date end) {
+        Phoneline phoneline = phonelineService.getByUser(user);
+        return callRepository.findByOriginAndDateBetween(phoneline,start,end);
     }
 
-    public List<Call> getUserMostCalled(User user) throws NotFoundException {
-        Phoneline tempPhoneline = new Phoneline();
-        tempPhoneline.setUser(user);
-        List<Call> c = callRepository.findTopByOriginOrderByDestinationDesc(tempPhoneline);
-        return Optional.ofNullable(c).orElseThrow(() -> new NotFoundException());
+    public List<Call> getUserMostCalled(User user) {
+        Phoneline phoneline = phonelineService.getByUser(user);
+        return callRepository.findTopByOriginOrderByDestinationDesc(phoneline);
     }
 
-    public Call registerCall(Call call) throws DataAccessException {
-        call.setDate(new Date());
+    public Call registerCall(Call call) throws ResourceNotFoundException {
+        if(phonelineService.getById(call.getOrigin().getId()) == null)
+            throw new ResourceNotFoundException(String.format("Resource phoneline id %d not found", call.getOrigin().getId()));
+        if(phonelineService.getById(call.getDestination().getId()) == null)
+            throw new ResourceNotFoundException(String.format("Resource phoneline id %d not found", call.getDestination().getId()));
         return callRepository.save(call);
     }
 }

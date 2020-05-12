@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.stream.Stream;
 
 @Entity
 @Table(name="phonelines")
@@ -15,7 +14,6 @@ import java.util.stream.Stream;
 @Builder
 public class Phoneline {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="id")
     @NotNull(message = "Provide id (Long)")
     private Long id;
@@ -31,20 +29,20 @@ public class Phoneline {
     private City city;
 
     public enum Type {
-        mobile, landline;
+        MOBILE, LANDLINE;
     }
 
     @Enumerated(EnumType.STRING)
     @Column(name = "phoneline_type")
-    @NotNull(message = "Provide type (mobile/landline)")
+    @NotNull(message = "Provide type (MOBILE/LANDLINE)")
     private Type type;
 
     public enum Status {
-        active, suspended, cancelled;
+        ACTIVE, SUSPENDED, CANCELLED;
     }
 
     @Enumerated(EnumType.STRING)
     @Column(name = "phoneline_status")
-    @NotNull(message = "Provide status (active/suspended/cancelled)")
+    @NotNull(message = "Provide status (ACTIVE/SUSPENDED/CANCELLED)")
     private Status status;
 }

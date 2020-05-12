@@ -1,10 +1,12 @@
 package com.utn.UTNPhones.Models;
 
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.stream.Stream;
+import java.util.Collection;
 
 @Entity
 @Table(name="users")
@@ -40,13 +42,13 @@ public class User {
     @NotNull(message = "Provide password (String)")
     private String password;
 
-    public enum Type {
-        user, employee;
+    public enum Role {
+        USER, EMPLOYEE;
     }
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_type")
-    @NotNull(message = "Provide type (user/employee)")
-    private Type type;
+    @Column(name = "user_role")
+    @NotNull(message = "Provide role (USER/EMPLOYEE)")
+    private Role role;
 }
 

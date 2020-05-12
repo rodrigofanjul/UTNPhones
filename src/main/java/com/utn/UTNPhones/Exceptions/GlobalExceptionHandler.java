@@ -7,20 +7,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.joining;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -42,57 +34,54 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .collect(Collectors.toList());
 
         body.put("errors", errors);
-
         return new ResponseEntity<>(body, headers, status);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public void constraintViolationException(HttpServletResponse response) throws IOException {
-        response.sendError(HttpStatus.BAD_REQUEST.value());
+    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex)
+    {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", new Date());
+        body.put("status", HttpStatus.BAD_REQUEST.value());
+        List<String> errors = new ArrayList<String>();
+        for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+            errors.add(violation.getRootBeanClass().getName() + " " + violation.getPropertyPath() + ": " + violation.getMessage());
+        }
+        body.put("errors", errors);
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Object> handleNotFoundException(NotFoundException ex, HandlerMethod handlerMethod) {
-
-        String controllerName = handlerMethod.getMethod().getDeclaringClass().getSimpleName();
-        String methodName = handlerMethod.getMethod().getName();
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<Object> handleAlreadyExistsException(ResourceAlreadyExistsException ex) {
 
         Map<String, Object> errors = new LinkedHashMap<>();
-        errors.put("timestamp", LocalDateTime.now());
-        errors.put("controller", controllerName);
-        errors.put("action", methodName);
-        errors.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(AlreadyExistsException.class)
-    public ResponseEntity<Object> handleAlreadyExistsException(AlreadyExistsException ex, HandlerMethod handlerMethod) {
-
-        String controllerName = handlerMethod.getMethod().getDeclaringClass().getSimpleName();
-        String methodName = handlerMethod.getMethod().getName();
-
-        Map<String, Object> errors = new LinkedHashMap<>();
-        errors.put("timestamp", LocalDateTime.now());
-        errors.put("controller", controllerName);
-        errors.put("action", methodName);
+        errors.put("timestamp", new Date());
+        errors.put("status", HttpStatus.BAD_REQUEST.value());
         errors.put("message", ex.getMessage());
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IncorrectPasswordException.class)
-    public ResponseEntity<Object> handleNullArgumentException(IncorrectPasswordException ex, HandlerMethod handlerMethod) {
-
-        String controllerName = handlerMethod.getMethod().getDeclaringClass().getSimpleName();
-        String methodName = handlerMethod.getMethod().getName();
+    public ResponseEntity<Object> handleNullArgumentException(IncorrectPasswordException ex) {
 
         Map<String, Object> errors = new LinkedHashMap<>();
-        errors.put("timestamp", LocalDateTime.now());
-        errors.put("controller", controllerName);
-        errors.put("action", methodName);
+        errors.put("timestamp", new Date());
+        errors.put("status", HttpStatus.BAD_REQUEST.value());
         errors.put("message", ex.getMessage());
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Object> handleNotFoundException(ResourceNotFoundException ex)
+    {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", new Date());
+        body.put("status", HttpStatus.BAD_REQUEST.value());
+        body.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 }
