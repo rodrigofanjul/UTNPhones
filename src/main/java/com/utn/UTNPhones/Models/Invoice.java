@@ -19,7 +19,7 @@ public class Invoice {
     @Column(name="id")
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_phoneline")
     @NotNull(message = "Provide phoneline {id}")
     private Phoneline phoneline;
@@ -30,11 +30,11 @@ public class Invoice {
 
     @Column(name = "invoice_cost_price")
     @NotNull(message = "Provide costPrice (Integer)")
-    private Integer costPrice;
+    private Float costPrice;
 
     @Column(name = "invoice_totalprice")
     @NotNull(message = "Provide totalPrice (Integer)")
-    private Integer totalPrice;
+    private Float totalPrice;
 
     @Column(name = "invoice_date")
     @NotNull(message = "Provide date (Date)")

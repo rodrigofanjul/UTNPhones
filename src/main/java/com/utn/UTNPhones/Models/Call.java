@@ -42,7 +42,7 @@ public class Call {
 
     @Column(name = "call_duration")
     @NotNull(message = "Provide duration (seconds)")
-    @Min(1)
+    @Min(value = 1, message = "Provide duration > 0 (seconds)")
     private Integer duration;
 
     @Column(name = "call_totalprice")
