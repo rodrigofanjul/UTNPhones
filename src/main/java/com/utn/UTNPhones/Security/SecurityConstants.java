@@ -4,7 +4,7 @@ public class SecurityConstants {
 
     // Spring Security
 
-    public static final String LOGIN_URL = "/users/**";
+    public static final String LOGIN_URL = "/users/login";
     public static final String HEADER_AUTHORIZATION_KEY = "Authorization";
     public static final String TOKEN_BEARER_PREFIX = "Bearer ";
 

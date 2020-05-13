@@ -24,7 +24,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .addFilterAfter(new SecurityFilter(), UsernamePasswordAuthenticationFilter.class)
             .authorizeRequests()
             .antMatchers(HttpMethod.POST,LOGIN_URL).permitAll() //permitimos el acceso a /login a cualquiera
-            .antMatchers("/phonelines").hasRole("EMPLOYEE")
             .anyRequest().authenticated(); //cualquier otra peticion requiere autenticacion
     }
 

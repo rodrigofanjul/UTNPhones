@@ -1,9 +1,10 @@
 package com.utn.UTNPhones.Security;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -11,8 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -35,13 +38,16 @@ public class SecurityFilter extends OncePerRequestFilter {
             if (existJWTToken(request, response)) {
                 Claims claims = validateToken(request);
                 if (claims.get("authorities") != null) {
-                    setUpSpringAuthentication(claims);
-                } else {
+                    Authentication auth = setUpSpringAuthentication(claims);
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }
+                else {
                     SecurityContextHolder.clearContext();
                 }
             }
             chain.doFilter(request, response);
-        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
+        }
+        catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
             return;
@@ -53,24 +59,12 @@ public class SecurityFilter extends OncePerRequestFilter {
         return Jwts.parser().setSigningKey(SUPER_SECRET_KEY.getBytes()).parseClaimsJws(jwtToken).getBody();
     }
 
-    private void setUpSpringAuthentication(Claims claims)
+    private Authentication setUpSpringAuthentication(Claims claims)
     {
-        List<GrantedAuthority> authorities = getAuthorities(claims);
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(claims.getSubject(), null, authorities );
-        SecurityContextHolder.getContext().setAuthentication(auth);
-    }
-
-    private List<GrantedAuthority> getAuthorities(Claims claims) {
-        Object authorities = claims.get("authorities");
-        if (authorities instanceof String) {
-            return AuthorityUtils.commaSeparatedStringToAuthorityList((String)authorities);
-        }
-        else if (authorities instanceof Collection) {
-            return AuthorityUtils.commaSeparatedStringToAuthorityList(StringUtils.collectionToCommaDelimitedString((Collection)authorities));
-        }
-        else {
-            throw new IllegalArgumentException("Authorities must be either a String or a Collection");
-        }
+        Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get("authorities")
+                .toString().split(",")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(claims.getSubject(), null, authorities);
+        return auth;
     }
 
     private boolean existJWTToken(HttpServletRequest request, HttpServletResponse res) {
