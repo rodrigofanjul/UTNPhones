@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class ControllerAdvice extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -52,8 +52,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public ResponseEntity<Object> handleAlreadyExistsException(ResourceAlreadyExistsException ex) {
+    @ExceptionHandler({IncorrectPasswordException.class,ResourceNotFoundException.class,ResourceAlreadyExistsException.class})
+    public ResponseEntity<Object> handleException(Exception ex) {
 
         Map<String, Object> errors = new LinkedHashMap<>();
         errors.put("timestamp", new Date());
@@ -61,27 +61,5 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         errors.put("message", ex.getMessage());
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(IncorrectPasswordException.class)
-    public ResponseEntity<Object> handleNullArgumentException(IncorrectPasswordException ex) {
-
-        Map<String, Object> errors = new LinkedHashMap<>();
-        errors.put("timestamp", new Date());
-        errors.put("status", HttpStatus.BAD_REQUEST.value());
-        errors.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Object> handleNotFoundException(ResourceNotFoundException ex)
-    {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
-        body.put("status", HttpStatus.BAD_REQUEST.value());
-        body.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 }

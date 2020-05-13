@@ -1,7 +1,5 @@
 package com.utn.UTNPhones.Exceptions;
 
-import org.springframework.dao.DataAccessException;
-
 public class ResourceNotFoundException extends Exception {
 
     public ResourceNotFoundException(){
