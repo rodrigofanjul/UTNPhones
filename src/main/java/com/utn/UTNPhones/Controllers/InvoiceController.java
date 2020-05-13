@@ -4,6 +4,7 @@ import com.utn.UTNPhones.Models.Invoice;
 import com.utn.UTNPhones.Services.Interfaces.IInvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class InvoiceController {
         this.invoiceService = invoiceService;
     }
 
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @GetMapping("")
     public ResponseEntity<Object> getAll() {
         List<Invoice> invoices = invoiceService.getAll();

@@ -4,6 +4,7 @@ import com.utn.UTNPhones.Models.Rate;
 import com.utn.UTNPhones.Services.Interfaces.IRateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ public class RateController {
         this.rateService = rateService;
     }
 
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @GetMapping("")
     public ResponseEntity<Object> getAll() {
         List<Rate> rates = rateService.getAll();

@@ -2,6 +2,7 @@ package com.utn.UTNPhones.Controllers;
 
 import com.utn.UTNPhones.Exceptions.ResourceAlreadyExistsException;
 import com.utn.UTNPhones.Models.Phoneline;
+import com.utn.UTNPhones.Security.SecurityProvider;
 import com.utn.UTNPhones.Services.Interfaces.IPhonelineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class PhonelineController {
         this.phonelineService = phonelineService;
     }
 
-    @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @PostMapping("")
     public ResponseEntity<Phoneline> registerPhoneline(@Valid @RequestBody @NotNull Phoneline phoneline) throws ResourceAlreadyExistsException {
         Phoneline registeredPhoneline = phonelineService.registerPhoneline(phoneline);
