@@ -12,7 +12,4 @@ public interface ICallRepository extends JpaRepository<Call,Integer> {
     List<Call> findByOrigin(Phoneline tempPhoneline);
     List<Call> findByOriginAndDateBetween(Phoneline tempPhoneline, Date start, Date end);
     List<Call> findTopByOriginOrderByDestinationDesc(Phoneline tempPhoneline);
-
-    @Procedure("sp_call")
-    int registerCall(Long origin, Long destination, int duration);
 }
