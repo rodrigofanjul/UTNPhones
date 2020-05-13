@@ -28,7 +28,7 @@ public class PhonelineService implements IPhonelineService {
 
     public Phoneline registerPhoneline(Phoneline phoneline) throws ResourceAlreadyExistsException {
         if(getById(phoneline.getId()) != null)
-            throw new ResourceAlreadyExistsException(String.format("Resource phoneline id %d already exists", phoneline.getId()));
+            throw new ResourceAlreadyExistsException(String.format("Resource Phoneline already exists with (id:%d)", phoneline.getId()));
         return phonelineRepository.save(phoneline);
     }
 }

@@ -41,10 +41,15 @@ public class CallService implements ICallService {
     }
 
     public Call registerCall(Call call) throws ResourceNotFoundException {
-        if(phonelineService.getById(call.getOrigin().getId()) == null)
-            throw new ResourceNotFoundException(String.format("Resource phoneline id %d not found", call.getOrigin().getId()));
-        if(phonelineService.getById(call.getDestination().getId()) == null)
-            throw new ResourceNotFoundException(String.format("Resource phoneline id %d not found", call.getDestination().getId()));
+        Phoneline origin = phonelineService.getById(call.getOrigin().getId());
+        if(origin == null)
+            throw new ResourceNotFoundException(String.format("Resource Phoneline not found with (id:%d)", call.getOrigin().getId()));
+
+        Phoneline destination = phonelineService.getById(call.getDestination().getId());
+        if(destination == null)
+            throw new ResourceNotFoundException(String.format("Resource Phoneline not found with (id:%d)", call.getDestination().getId()));
+        call.setOrigin(origin);
+        call.setDestination(destination);
         return callRepository.save(call);
     }
 }

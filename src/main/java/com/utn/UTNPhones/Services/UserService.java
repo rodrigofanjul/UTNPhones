@@ -10,14 +10,8 @@ import com.utn.UTNPhones.Services.Interfaces.ICityService;
 import com.utn.UTNPhones.Services.Interfaces.IProvinceService;
 import com.utn.UTNPhones.Services.Interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -48,16 +42,26 @@ public class UserService implements IUserService {
 
     public User registerUser(User user) throws ResourceAlreadyExistsException, ResourceNotFoundException {
         if(userRepository.findByIdcard(user.getIdcard()) != null)
-            throw new ResourceAlreadyExistsException(String.format("Resource user id %d already exists", user.getIdcard()));
+            throw new ResourceAlreadyExistsException(String.format("Resource User already exists with (id:%d)", user.getIdcard()));
         City city = cityService.getById(user.getCity().getId());
-        if(city == null) throw new ResourceNotFoundException(String.format("Resource city id %d not found",user.getCity().getId()));
+        if(city == null)
+            throw new ResourceNotFoundException(String.format("Resource City not found with (id:%d)",user.getCity().getId()));
         Province province = provinceService.getById(city.getProvince().getId());
-        if(province == null) throw new ResourceNotFoundException(String.format("Resource province id %d not found",user.getCity().getId()));
+        if(province == null)
+            throw new ResourceNotFoundException(String.format("Resource Province not found with (id:%d)",user.getCity().getId()));
         return userRepository.save(user);
     }
 
-    public User updateUser(int id, User user) {
+    public User updateUser(int id, User user) throws ResourceAlreadyExistsException, ResourceNotFoundException {
         user.setId(id);
+        if(userRepository.findByIdcard(user.getIdcard()) != null)
+            throw new ResourceAlreadyExistsException(String.format("Resource User already exists with (id:%d)", user.getIdcard()));
+        City city = cityService.getById(user.getCity().getId());
+        if(city == null)
+            throw new ResourceNotFoundException(String.format("Resource City not found with (id:%d)",user.getCity().getId()));
+        Province province = provinceService.getById(city.getProvince().getId());
+        if(province == null)
+            throw new ResourceNotFoundException(String.format("Resource Province not found with (id:%d)",user.getCity().getId()));
         return userRepository.save(user);
     }
 }
