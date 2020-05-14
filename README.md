@@ -8,7 +8,7 @@ Acceso a PDF con consignas del TP:
 
 All possible operations are listed below:
 
-### Users
+### Users  
 > GET localhost:8080/users  
 > GET localhost:8080/users/{id}  
 > GET localhost:8080/users/{id}/invoices  
@@ -20,18 +20,18 @@ All possible operations are listed below:
 > POST localhost:8080/users/login/  
 > PUT localhost:8080/users/{id}  
 
-### Calls
-> GET localhost:8080/calls
-> POST localhost:8080/calls
+### Calls  
+> GET localhost:8080/calls  
+> POST localhost:8080/calls  
 
-### Invoices
-> GET localhost:8080/invoices
+### Invoices  
+> GET localhost:8080/invoices  
 
-### Phonelines
-> GET localhost:8080/phonelines
-> GET localhost:8080/phonelines/{id}
-> POST localhost:8080/phonelines
+### Phonelines  
+> GET localhost:8080/phonelines  
+> GET localhost:8080/phonelines/{id}  
+> POST localhost:8080/phonelines  
 
-### Rates
-> GET localhost:8080/rates
-> GET localhost:8080/rates/between
+### Rates  
+> GET localhost:8080/rates  
+> GET localhost:8080/rates/between  
