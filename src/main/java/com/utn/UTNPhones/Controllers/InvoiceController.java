@@ -1,5 +1,6 @@
 package com.utn.UTNPhones.Controllers;
 
+import com.utn.UTNPhones.Exceptions.ResourceNotFoundException;
 import com.utn.UTNPhones.Models.Invoice;
 import com.utn.UTNPhones.Services.Interfaces.IInvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,8 @@ public class InvoiceController {
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     @GetMapping("")
-    public ResponseEntity<Object> getAll() {
+    public ResponseEntity<Object> getAll() throws ResourceNotFoundException {
         List<Invoice> invoices = invoiceService.getAll();
-        if (invoices == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(invoices);
     }
 }

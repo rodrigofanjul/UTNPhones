@@ -1,6 +1,7 @@
 package com.utn.UTNPhones.Controllers;
 
 import com.utn.UTNPhones.Exceptions.ResourceAlreadyExistsException;
+import com.utn.UTNPhones.Exceptions.ResourceNotFoundException;
 import com.utn.UTNPhones.Models.Phoneline;
 import com.utn.UTNPhones.Security.SecurityProvider;
 import com.utn.UTNPhones.Services.Interfaces.IPhonelineService;
@@ -28,9 +29,8 @@ public class PhonelineController {
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     @PostMapping("")
-    public ResponseEntity<Phoneline> registerPhoneline(@Valid @RequestBody @NotNull Phoneline phoneline) throws ResourceAlreadyExistsException {
+    public ResponseEntity<Phoneline> registerPhoneline(@Valid @RequestBody @NotNull Phoneline phoneline) throws ResourceAlreadyExistsException, ResourceNotFoundException {
         Phoneline registeredPhoneline = phonelineService.registerPhoneline(phoneline);
-        if (registeredPhoneline == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(registeredPhoneline);
     }
 }

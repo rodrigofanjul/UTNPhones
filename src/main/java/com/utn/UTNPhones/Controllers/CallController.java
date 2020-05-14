@@ -26,7 +26,6 @@ public class CallController {
     @PostMapping("")
     public ResponseEntity<Call> registerCall(@Valid @RequestBody @NotNull Call call) throws ResourceNotFoundException {
         Call registeredCall = callService.registerCall(call);
-        if (registeredCall == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(registeredCall);
     }
 }

@@ -1,5 +1,6 @@
 package com.utn.UTNPhones.Services;
 
+import com.utn.UTNPhones.Exceptions.ResourceNotFoundException;
 import com.utn.UTNPhones.Models.City;
 import com.utn.UTNPhones.Repositories.ICityRepository;
 import com.utn.UTNPhones.Services.Interfaces.ICityService;
@@ -16,7 +17,8 @@ public class CityService implements ICityService {
         this.cityRepository = cityRepository;
     }
 
-    public City getById(Integer id) {
-        return cityRepository.findById(id).orElse(null);
+    public City getById(Integer id) throws ResourceNotFoundException {
+        return cityRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Resource City not found with (id:%d)",id)));
     }
 }

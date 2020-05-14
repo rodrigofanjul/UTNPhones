@@ -1,5 +1,6 @@
 package com.utn.UTNPhones.Controllers;
 
+import com.utn.UTNPhones.Exceptions.ResourceNotFoundException;
 import com.utn.UTNPhones.Models.Rate;
 import com.utn.UTNPhones.Services.Interfaces.IRateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,8 @@ public class RateController {
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     @GetMapping("")
-    public ResponseEntity<Object> getAll() {
+    public ResponseEntity<Object> getAll() throws ResourceNotFoundException {
         List<Rate> rates = rateService.getAll();
-        if (rates == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(rates);
     }
 }
