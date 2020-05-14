@@ -9,7 +9,7 @@ import java.util.List;
 public interface IUserService {
     User registerUser(User user) throws ResourceAlreadyExistsException, ResourceNotFoundException;
     User updateUser(int id, User user) throws ResourceAlreadyExistsException, ResourceNotFoundException;
-    List<User> getAll();
-    User getById(int id);
-    User getByIdcard(int idcard);
+    List<User> getAll() throws ResourceNotFoundException;
+    User getById(int id) throws ResourceNotFoundException;
+    User getByIdcard(int idcard) throws ResourceNotFoundException;
 }
