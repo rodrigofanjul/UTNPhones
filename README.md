@@ -4,29 +4,34 @@ Acceso a PDF con consignas del TP:
 
 [TP INTEGRADOR BASE DE DATOS/ PROGRAMACIÓN AVANZADA I](https://github.com/rodrigofanjul/UTNPhones/blob/master/docs/PAI%20-%20BD2%20-%20TP%20FINAL%20-%20Borrador.pdf)
  
-## Registrar un nuevo usuario  
+# API Operations
 
-Se puede registrar un nuevo usuario enviando la siguiente Request al servidor:
+All possible operations are listed below:
 
-> POST localhost:8080/user/register/
+### Users
+> GET localhost:8080/users
+> GET localhost:8080/users/{id}
+> GET localhost:8080/users/{id}/invoices
+> GET localhost:8080/users/{id}/invoices/between
+> GET localhost:8080/users/{id}/calls
+> GET localhost:8080/users/{id}/calls/between
+> GET localhost:8080/users/{id}/calls/mostcalled
+> POST localhost:8080/users/register/
+> POST localhost:8080/users/login/
+> PUT localhost:8080/users/{id}
 
-    {
-   	    "name": "Rodrigo",
-   	    "lastname": "Fanjul",  
-   	    "idcard": 38831866,  
-   	    "password": "123",
-   	    "type": "user",
-   	    "city":
-   	    {
-	        "id": 16501
-   	    }
-    }
+### Calls
+> GET localhost:8080/calls
+> POST localhost:8080/calls
 
-Se puede loguearse enviando la siguiente Request al servidor:
+### Invoices
+> GET localhost:8080/invoices
 
-> POST localhost:8080/user/login/
+### Phonelines
+> GET localhost:8080/phonelines
+> GET localhost:8080/phonelines/{id}
+> POST localhost:8080/phonelines
 
-    {
-   	    "idcard": 38831866,  
-   	    "password": "123"
-    }
+### Rates
+> GET localhost:8080/rates
+> GET localhost:8080/rates/between
