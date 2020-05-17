@@ -42,6 +42,6 @@ DELIMITER //
 CREATE TRIGGER tbi_calls BEFORE INSERT ON calls FOR EACH ROW
 BEGIN    
     SET NEW.call_rate = getRate(NEW.id_line_origin,NEW.id_line_destination);
-    SET NEW.call_totalprice = (NEW.call_duration * (NEW.call_rate/60));
+    SET NEW.call_price = (NEW.call_duration * (NEW.call_rate/60));
 END; //
 DELIMITER ;

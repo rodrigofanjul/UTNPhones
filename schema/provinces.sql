@@ -1,24 +1,24 @@
-INSERT INTO provinces VALUES ('1', 'Buenos Aires');
-INSERT INTO provinces VALUES ('2', 'Capital Federal');
-INSERT INTO provinces VALUES ('3', 'Catamarca');
-INSERT INTO provinces VALUES ('4', 'Chaco');
-INSERT INTO provinces VALUES ('5', 'Chubut');
-INSERT INTO provinces VALUES ('6', 'Cordoba');
-INSERT INTO provinces VALUES ('7', 'Corrientes');
-INSERT INTO provinces VALUES ('8', 'Entre Rios');
-INSERT INTO provinces VALUES ('9', 'Formosa');
-INSERT INTO provinces VALUES ('10', 'Jujuy');
-INSERT INTO provinces VALUES ('11', 'La Pampa');
-INSERT INTO provinces VALUES ('12', 'La Rioja');
-INSERT INTO provinces VALUES ('13', 'Mendoza');
-INSERT INTO provinces VALUES ('14', 'Misiones');
-INSERT INTO provinces VALUES ('15', 'Neuquen');
-INSERT INTO provinces VALUES ('16', 'Rio Negro');
-INSERT INTO provinces VALUES ('17', 'Salta');
-INSERT INTO provinces VALUES ('18', 'San Juan');
-INSERT INTO provinces VALUES ('19', 'San Luis');
-INSERT INTO provinces VALUES ('20', 'Santa Cruz');
-INSERT INTO provinces VALUES ('21', 'Santa Fe');
-INSERT INTO provinces VALUES ('22', 'Santiago del Estero');
-INSERT INTO provinces VALUES ('23', 'Tierra del Fuego');
-INSERT INTO provinces VALUES ('24', 'Tucuman');
+INSERT INTO provinces VALUES('1', 'Buenos Aires'),
+('2', 'Capital Federal'),
+('3', 'Catamarca'),
+('4', 'Chaco'),
+('5', 'Chubut'),
+('6', 'Cordoba'),
+('7', 'Corrientes'),
+('8', 'Entre Rios'),
+('9', 'Formosa'),
+('10', 'Jujuy'),
+('11', 'La Pampa'),
+('12', 'La Rioja'),
+('13', 'Mendoza'),
+('14', 'Misiones'),
+('15', 'Neuquen'),
+('16', 'Rio Negro'),
+('17', 'Salta'),
+('18', 'San Juan'),
+('19', 'San Luis'),
+('20', 'Santa Cruz'),
+('21', 'Santa Fe'),
+('22', 'Santiago del Estero'),
+('23', 'Tierra del Fuego'),
+('24', 'Tucuman');
