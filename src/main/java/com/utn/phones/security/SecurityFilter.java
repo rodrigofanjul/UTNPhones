@@ -51,6 +51,12 @@ public class SecurityFilter extends OncePerRequestFilter {
         }
     }
 
+    private boolean existJWTToken(HttpServletRequest request, HttpServletResponse res) {
+        String authenticationHeader = request.getHeader(HEADER_AUTHORIZATION_KEY);
+        if (authenticationHeader == null || !authenticationHeader.startsWith(TOKEN_BEARER_PREFIX)) return false;
+        return true;
+    }
+
     private Claims validateToken(HttpServletRequest request) {
         String jwtToken = request.getHeader(HEADER_AUTHORIZATION_KEY).replace(TOKEN_BEARER_PREFIX, "");
         return Jwts.parser().setSigningKey(SUPER_SECRET_KEY.getBytes()).parseClaimsJws(jwtToken).getBody();
@@ -62,11 +68,5 @@ public class SecurityFilter extends OncePerRequestFilter {
                 .toString().split(",")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(claims.getSubject(), null, authorities);
         return auth;
-    }
-
-    private boolean existJWTToken(HttpServletRequest request, HttpServletResponse res) {
-        String authenticationHeader = request.getHeader(HEADER_AUTHORIZATION_KEY);
-        if (authenticationHeader == null || !authenticationHeader.startsWith(TOKEN_BEARER_PREFIX)) return false;
-        return true;
     }
 }

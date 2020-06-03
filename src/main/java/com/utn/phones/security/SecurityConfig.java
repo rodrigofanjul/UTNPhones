@@ -3,6 +3,7 @@ package com.utn.phones.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,12 +31,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .addFilterAfter(new SecurityFilter(), UsernamePasswordAuthenticationFilter.class)
             .authorizeRequests()
             .antMatchers(HttpMethod.POST,LOGIN_URL).permitAll() //permitimos el acceso a /login a cualquiera
+            .antMatchers(HttpMethod.POST,"/api/users").permitAll()
             .anyRequest().authenticated(); //cualquier otra peticion requiere autenticacion
     }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SecurityProvider securityProvider() { return new SecurityProvider(); }
+
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @PreAuthorize("hasAuthority('USER')")
+    public @interface IsUser {
     }
 
     @Target(ElementType.METHOD)
@@ -46,19 +57,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
-    @PreAuthorize("hasAuthority('USER')")
-    public @interface IsUser {
+    @PreAuthorize("hasAuthority('INFRAESTRUCTURE')")
+    public @interface IsInfraestructure {
     }
 
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
-    @PreAuthorize("hasAuthority('USER') and #id == authentication.principal.username")
-    public @interface IsSameUser {
+    @PreAuthorize("hasAuthority('USER') OR hasAuthority('EMPLOYEE')")
+    public @interface IsUserOrEmployee {
     }
 
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
-    @PreAuthorize("(hasAuthority('USER') and #id == authentication.principal.username) or hasAuthority('EMPLOYEE')")
-    public @interface IsSameUserOrEmployee {
+    @PreAuthorize("(hasAuthority('USER') AND authentication.getPrincipal().equals(''+#id)) OR hasAuthority('EMPLOYEE')")
+    public @interface IsSelfUserOrEmployee {
+    }
+
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @PreAuthorize("@SecurityService.isSelfPhoneline(authentication, #id)")
+    public @interface IsSelfPhoneline {
+    }
+
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @PreAuthorize("(hasAuthority('USER') AND @SecurityService.isSelfPhoneline(authentication, #id)) OR hasAuthority('EMPLOYEE')")
+    public @interface IsSelfPhonelineOrEmployee {
     }
 }
