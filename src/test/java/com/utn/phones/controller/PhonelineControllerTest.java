@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -24,6 +25,8 @@ public class PhonelineControllerTest {
 
     PhonelineService phonelineService;
     PhonelineController phonelineController;
+
+    City testCity;
     User testUser;
     Phoneline testPhoneline;
     List<Phoneline> testPhonelines;
@@ -32,10 +35,10 @@ public class PhonelineControllerTest {
     public void setUp() {
         phonelineService = mock(PhonelineService.class);
         phonelineController = new PhonelineController(phonelineService);
-        testUser = new User(1,new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223),"nombre","apellido",123,"123", EMPLOYEE);
-        testPhoneline = new Phoneline(1l,testUser,testUser.getCity(),MOBILE,ACTIVE);
-        testPhonelines = new ArrayList<Phoneline>();
-        testPhonelines.add(testPhoneline);
+        testCity = new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223);
+        testUser = new User(1,testCity,"nombre","apellido",123,"123", EMPLOYEE);
+        testPhoneline = new Phoneline(1l,testUser,testCity,MOBILE,ACTIVE);
+        testPhonelines = Arrays.asList(testPhoneline);
     }
 
     @Test
@@ -59,26 +62,43 @@ public class PhonelineControllerTest {
     }
 
     @Test
-    public void testNewPhonelineOk() throws ResourceNotFoundException, ResourceAlreadyExistsException {
+    public void testGetPhonelineByIdOk() throws ResourceNotFoundException {
+        try {
+            when(phonelineService.getById(1l)).thenReturn(testPhoneline);
+            Phoneline phoneline = phonelineController.getPhonelineById(1l);
+            assertEquals(Long.valueOf(1), phoneline.getId());
+            assertEquals(testUser, phoneline.getUser());
+            assertEquals(testCity, phoneline.getCity());
+            assertEquals(MOBILE, phoneline.getType());
+            assertEquals(ACTIVE, phoneline.getStatus());
+            verify(phonelineService, times(1)).getById(1l);
+        }
+        catch (ResourceNotFoundException ex) {
+            fail();
+        }
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void testGetPhonelineByIdNotFound() throws ResourceNotFoundException {
+        when(phonelineService.getById(1l)).thenThrow(new ResourceNotFoundException());
+        Phoneline phoneline = phonelineController.getPhonelineById(1l);
+    }
+
+    @Test
+    public void testNewPhonelineOk() throws ResourceAlreadyExistsException {
         try {
             when(phonelineService.newPhoneline(testPhoneline)).thenReturn(testPhoneline);
             Phoneline phoneline = phonelineController.newPhoneline(testPhoneline);
             assertEquals(Long.valueOf(1), phoneline.getId());
             verify(phonelineService, times(1)).newPhoneline(testPhoneline);
         }
-        catch (ResourceNotFoundException | ResourceAlreadyExistsException ex) {
+        catch (ResourceAlreadyExistsException ex) {
             fail();
         }
     }
 
-    @Test(expected = ResourceNotFoundException.class)
-    public void testNewPhonelineNotFound() throws ResourceNotFoundException, ResourceAlreadyExistsException {
-        when(phonelineService.newPhoneline(testPhoneline)).thenThrow(new ResourceNotFoundException());
-        Phoneline phoneline = phonelineController.newPhoneline(testPhoneline);
-    }
-
     @Test(expected = ResourceAlreadyExistsException.class)
-    public void testNewPhonelineAlreadyExists() throws ResourceAlreadyExistsException, ResourceNotFoundException {
+    public void testNewPhonelineAlreadyExists() throws ResourceAlreadyExistsException {
         when(phonelineService.newPhoneline(testPhoneline)).thenThrow(new ResourceAlreadyExistsException());
         Phoneline phoneline = phonelineController.newPhoneline(testPhoneline);
     }

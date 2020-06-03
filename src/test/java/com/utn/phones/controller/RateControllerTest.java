@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -20,6 +21,8 @@ public class RateControllerTest {
 
     RateService rateService;
     RateController rateController;
+
+    City testCity;
     Rate testRate;
     List<Rate> testRates;
 
@@ -27,10 +30,10 @@ public class RateControllerTest {
     public void setUp() {
         rateService = mock(RateService.class);
         rateController = new RateController(rateService);
-        City testCity = new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223);
+
+        testCity = new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223);
         testRate = new Rate(1,testCity,testCity,1.0f);
-        testRates = new ArrayList<Rate>();
-        testRates.add(testRate);
+        testRates = Arrays.asList(testRate);
     }
 
     @Test

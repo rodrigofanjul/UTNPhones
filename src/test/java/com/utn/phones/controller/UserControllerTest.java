@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,9 +33,9 @@ public class UserControllerTest {
     public void setUp() {
         userService = mock(UserService.class);
         userController = new UserController(userService);
+
         testUser = new User(1,new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223),"nombre","apellido",123,"123", EMPLOYEE);
-        testUsers = new ArrayList<User>();
-        testUsers.add(testUser);
+        testUsers = Arrays.asList(testUser);
     }
 
     @Test
@@ -127,11 +128,11 @@ public class UserControllerTest {
     @Test
     public void testUpdateUserOk() throws ResourceNotFoundException, ResourceAlreadyExistsException {
         try {
-            when(userService.updateUser(1, testUser)).thenReturn(testUser);
-            User user = userController.updateUser(1, testUser);
+            when(userService.updateUser(testUser)).thenReturn(testUser);
+            User user = userController.updateUser(testUser);
             assertEquals(Integer.valueOf(1), user.getId());
             assertEquals(Integer.valueOf(123), user.getIdcard());
-            verify(userService, times(1)).updateUser(1, testUser);
+            verify(userService, times(1)).updateUser(testUser);
         }
         catch (ResourceNotFoundException | ResourceAlreadyExistsException ex) {
             fail();
@@ -140,13 +141,13 @@ public class UserControllerTest {
 
     @Test(expected = ResourceNotFoundException.class)
     public void testUpdateUserNotFound() throws ResourceNotFoundException, ResourceAlreadyExistsException {
-        when(userService.updateUser(1, testUser)).thenThrow(new ResourceNotFoundException());
-        User user = userController.updateUser(1, testUser);
+        when(userService.updateUser(testUser)).thenThrow(new ResourceNotFoundException());
+        User user = userController.updateUser(testUser);
     }
 
     @Test(expected = ResourceAlreadyExistsException.class)
     public void testUpdateUserAlreadyExists() throws ResourceAlreadyExistsException, ResourceNotFoundException {
-        when(userService.updateUser(1, testUser)).thenThrow(new ResourceAlreadyExistsException());
-        User user = userController.updateUser(1, testUser);
+        when(userService.updateUser(testUser)).thenThrow(new ResourceAlreadyExistsException());
+        User user = userController.updateUser(testUser);
     }
 }

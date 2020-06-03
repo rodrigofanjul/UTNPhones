@@ -6,7 +6,7 @@ import com.utn.phones.service.InvoiceService;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -30,11 +30,11 @@ public class InvoiceControllerTest {
     public void setUp() {
         invoiceService = mock(InvoiceService.class);
         invoiceController = new InvoiceController(invoiceService);
+
         testUser = new User(1,new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223),"nombre","apellido",123,"123", EMPLOYEE);
         testDate = new Date();
         testInvoice = new Invoice(1,new Phoneline(1l,testUser,testUser.getCity(),MOBILE,ACTIVE),1,1f,1.21f,new Date(),false,new Date());
-        testInvoices = new ArrayList<Invoice>();
-        testInvoices.add(testInvoice);
+        testInvoices = Arrays.asList(testInvoice);
     }
 
     @Test
