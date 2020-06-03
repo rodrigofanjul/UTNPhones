@@ -33,7 +33,7 @@ CREATE TABLE users(
 	user_lastname VARCHAR(45) NOT NULL,
 	user_idcard INT NOT NULL UNIQUE,
 	user_password VARCHAR(200) NOT NULL,
-	user_role ENUM("USER", "EMPLOYEE") NOT NULL,
+	user_role ENUM("USER", "EMPLOYEE","INFRAESTRUCTURE") NOT NULL,
 	CONSTRAINT fk_users_city FOREIGN KEY(id_city) REFERENCES cities(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
