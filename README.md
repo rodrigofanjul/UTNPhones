@@ -8,4 +8,8 @@ Link to PDF with assignments:
 
 All possible operations are listed below:
 
-> https://www.getpostman.com/collections/24dadc0ae553b25e3650
+> https://documenter.getpostman.com/view/11243328/SztHWjd1?version=latest
+
+# Consigna
+
+> Enpoint que devuelva listado de ciudades filtradas por Provincia, ocultar ID.
