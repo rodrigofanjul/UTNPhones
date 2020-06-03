@@ -6,15 +6,7 @@ public class ResourceNotFoundException extends Exception {
         super("Resource not found");
     }
 
-    public ResourceNotFoundException(String message) {
-        super(message);
-    }
+    public ResourceNotFoundException(String message) { super(message); }
 
-    public ResourceNotFoundException(int id) {
-        super(String.format("Resource with id %d not found", id));
-    }
-
-    public ResourceNotFoundException(String message, int id) {
-        super(String.format(message, id));
-    }
+    public ResourceNotFoundException(String message, int id) { super(String.format(message, id)); }
 }

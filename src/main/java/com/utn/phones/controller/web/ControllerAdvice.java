@@ -23,24 +23,26 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
-        body.put("status", status.value());
-        body.put("errors", ex.getBindingResult().getFieldErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.toList()));
-        body.put("path", ((HttpServletRequest)request).getRequestURI());
-        return new ResponseEntity<>(body, headers, status);
+        return new ResponseEntity<>(new ErrorResponseDto(new Date(), status.value(), status.getReasonPhrase(),
+                ex.getBindingResult().getFieldErrors().stream().map(x -> x.getDefaultMessage())
+                .collect(Collectors.toList()).toString(), ((HttpServletRequest)request).getRequestURI()), headers, status);
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(InvalidLoginException.class)
     public ErrorResponseDto handleInvalidLoginException(HttpServletRequest request, InvalidLoginException ex) {
-        return new ErrorResponseDto(new Date(), HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), request.getRequestURI());
+        return new ErrorResponseDto(new Date(), HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), ex.getMessage(), request.getRequestURI());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({ResourceNotFoundException.class, ResourceAlreadyExistsException.class})
-    public ErrorResponseDto handleException(HttpServletRequest request, Exception ex) {
-        return new ErrorResponseDto(new Date(), HttpStatus.BAD_REQUEST.value(), ex.getMessage(), request.getRequestURI());
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ErrorResponseDto handleAlreadyExistsException(HttpServletRequest request, ResourceAlreadyExistsException ex) {
+        return new ErrorResponseDto(new Date(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), ex.getMessage(), request.getRequestURI());
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ErrorResponseDto handleNotFoundException(HttpServletRequest request, ResourceNotFoundException ex) {
+        return new ErrorResponseDto(new Date(), HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), ex.getMessage(), request.getRequestURI());
     }
 }

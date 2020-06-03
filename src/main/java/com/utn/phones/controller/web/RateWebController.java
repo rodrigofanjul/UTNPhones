@@ -3,6 +3,7 @@ package com.utn.phones.controller.web;
 import com.utn.phones.controller.RateController;
 import com.utn.phones.exception.ResourceNotFoundException;
 import com.utn.phones.model.Rate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class RateWebController {
 
     @IsEmployee
     @GetMapping
-    public ResponseEntity<Object> getAll() throws ResourceNotFoundException {
+    public ResponseEntity<List<Rate>> getRates() throws ResourceNotFoundException {
         List<Rate> rates = rateController.getRates();
         return (rates.size() > 0) ? ResponseEntity.ok(rates) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

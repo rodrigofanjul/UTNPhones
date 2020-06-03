@@ -36,7 +36,7 @@ public class UserController {
         return userService.newUser(user);
     }
 
-    public User updateUser(int id, User user) throws ResourceNotFoundException, ResourceAlreadyExistsException {
-        return userService.updateUser(id, user);
+    public User updateUser(User user) throws ResourceNotFoundException, ResourceAlreadyExistsException {
+        return userService.updateUser(user);
     }
 }

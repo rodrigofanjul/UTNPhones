@@ -23,7 +23,11 @@ public class PhonelineController {
         return phonelineService.getAll();
     }
 
-    public Phoneline newPhoneline(Phoneline phoneline) throws ResourceNotFoundException, ResourceAlreadyExistsException {
+    public Phoneline getPhonelineById(Long id) throws ResourceNotFoundException {
+        return phonelineService.getById(id);
+    }
+
+    public Phoneline newPhoneline(Phoneline phoneline) throws ResourceAlreadyExistsException {
         return phonelineService.newPhoneline(phoneline);
     }
 }

@@ -8,7 +8,6 @@ import com.utn.phones.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,23 +32,8 @@ public class InvoiceWebController {
 
     @IsEmployee
     @GetMapping
-    public ResponseEntity<Object> getAll() throws ResourceNotFoundException {
+    public ResponseEntity<List<Invoice>> getInvoices() throws ResourceNotFoundException {
         List<Invoice> invoices = invoiceController.getInvoices();
         return (invoices.size() > 0) ? ResponseEntity.ok(invoices) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    @IsSameUserOrEmployee
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> getUserInvoices(@Validated @PathVariable @Min(1) int id) throws ResourceNotFoundException {
-        User u = userController.getUserById(id);
-        List<Invoice> invoices = invoiceController.getInvoicesByUser(u);
-        return ResponseEntity.ok(invoices);
-    }
-
-    @IsSameUserOrEmployee
-    @GetMapping("/{id}/between")
-    public ResponseEntity<Object> getUserInvoicesBetween(@Validated @PathVariable @Min(1) int id, @RequestParam Date start, @RequestParam Date end) throws ResourceNotFoundException {
-        User u = userController.getUserById(id);
-        return ResponseEntity.ok(invoiceController.getInvoicesByUserBetween(u,start,end));
     }
 }

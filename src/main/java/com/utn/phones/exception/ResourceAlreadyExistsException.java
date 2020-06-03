@@ -10,10 +10,6 @@ public class ResourceAlreadyExistsException extends Exception {
         super(message);
     }
 
-    public ResourceAlreadyExistsException(int id) {
-        super(String.format("Resource with id %d already exists", id));
-    }
-
     public ResourceAlreadyExistsException(String message, int id) {
         super(String.format(message, id));
     }

@@ -18,24 +18,26 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.NotNull;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/login")
 public class LoginWebController {
 
     private final UserController userController;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final SecurityProvider securityProvider;
 
     @Autowired
-    public LoginWebController(UserController userController, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public LoginWebController(UserController userController, BCryptPasswordEncoder bCryptPasswordEncoder, SecurityProvider securityProvider) {
         this.userController = userController;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.securityProvider = securityProvider;
     }
     
     @PostMapping
     public ResponseEntity<Object> loginUser(@RequestBody @NotNull User user) throws InvalidLoginException, ResourceNotFoundException {
         User loggedUser = userController.getUserByIdCard(user.getIdcard());
         if(!bCryptPasswordEncoder.matches(user.getPassword(),loggedUser.getPassword())) throw new InvalidLoginException();
-        String token = SecurityProvider.tokenProvider(loggedUser.getId().toString(),loggedUser.getRole().toString());
-        return ResponseEntity.ok().headers(createHeaders(token)).build();
+        return ResponseEntity.ok().headers(createHeaders(
+                securityProvider.getToken(loggedUser.getId().toString(),loggedUser.getRole().toString()))).build();
     }
 
     private HttpHeaders createHeaders(String token) {
