@@ -7,10 +7,9 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="users")
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
-@Builder
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -39,7 +38,7 @@ public class User {
     private String password;
 
     public enum Role {
-        USER, EMPLOYEE;
+        USER, EMPLOYEE, INFRAESTRUCTURE;
     }
 
     @Enumerated(EnumType.STRING)

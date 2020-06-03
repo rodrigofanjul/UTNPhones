@@ -7,10 +7,9 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="phonelines")
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
-@Builder
 public class Phoneline {
     @Id
     @Column(name="id")

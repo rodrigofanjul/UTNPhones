@@ -9,10 +9,9 @@ import java.util.Date;
 
 @Entity
 @Table(name="calls")
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
-@Builder
 public class Call {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

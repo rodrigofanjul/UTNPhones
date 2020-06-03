@@ -8,10 +8,9 @@ import java.util.Date;
 
 @Entity
 @Table(name="invoices")
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
-@Builder
 public class Invoice {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
