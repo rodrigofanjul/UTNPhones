@@ -11,5 +11,5 @@ public interface IUserService {
     User getById(int id) throws ResourceNotFoundException;
     User getByIdCard(int id) throws ResourceNotFoundException;
     User newUser(User user) throws ResourceAlreadyExistsException, ResourceNotFoundException;
-    User updateUser(int id, User user) throws ResourceAlreadyExistsException, ResourceNotFoundException;
+    User updateUser(User user) throws ResourceAlreadyExistsException, ResourceNotFoundException;
 }

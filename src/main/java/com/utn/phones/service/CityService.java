@@ -19,6 +19,6 @@ public class CityService implements ICityService {
 
     public City getById(Integer id) throws ResourceNotFoundException {
         return cityRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Resource City not found with (id:%d)",id)));
+                .orElseThrow(() -> new ResourceNotFoundException("Resource City not found with (id:%d)",id));
     }
 }

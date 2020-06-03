@@ -19,6 +19,6 @@ public class ProvinceService implements IProvinceService {
 
     public Province getById(Integer id) throws ResourceNotFoundException {
         return provinceRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Resource Province not found with (id:%d)",id)));
+                .orElseThrow(() -> new ResourceNotFoundException("Resource Province not found with (id:%d)",id));
     }
 }

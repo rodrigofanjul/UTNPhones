@@ -27,16 +27,16 @@ public class InvoiceService implements IInvoiceService {
 
     public List<Invoice> getAll() throws ResourceNotFoundException {
         return Optional.ofNullable(invoiceRepository.findAll())
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Resources Invoice not found")));
+                .orElseThrow(() -> new ResourceNotFoundException());
     }
 
     public List<Invoice> getByUser(User user) throws ResourceNotFoundException {
-        return Optional.ofNullable(invoiceRepository.findByPhoneline(phonelineService.getByUser(user)))
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Resources Invoice not found for User with (id:%d)",user.getId())));
+        return Optional.ofNullable(invoiceRepository.findByPhonelineIn(phonelineService.getByUser(user)))
+                .orElseThrow(() -> new ResourceNotFoundException("Resources Invoice not found for User with (id:%d)",user.getId()));
     }
 
     public List<Invoice> getByUserBetween(User user, Date start, Date end) throws ResourceNotFoundException {
-        return Optional.ofNullable(invoiceRepository.findByPhonelineAndDateBetween(phonelineService.getByUser(user),start,end))
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Resources Invoice not found for User with (id:%d)",user.getId())));
+        return Optional.ofNullable(invoiceRepository.findByPhonelineInAndDateBetween(phonelineService.getByUser(user),start,end))
+                .orElseThrow(() -> new ResourceNotFoundException("Resources Invoice not found for User with (id:%d)",user.getId()));
     }
 }

@@ -24,22 +24,22 @@ public class PhonelineService implements IPhonelineService {
 
     public List<Phoneline> getAll() throws ResourceNotFoundException {
         return Optional.ofNullable(phonelineRepository.findAll())
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Resource Phoneline not found")));
+                .orElseThrow(() -> new ResourceNotFoundException());
     }
 
     public Phoneline getById(Long id) throws ResourceNotFoundException {
         return Optional.ofNullable(phonelineRepository.findById(id))
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Resource Phoneline not found with (id:%d)", id)));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Resource not found with (id:%d)", id)));
     }
 
-    public Phoneline getByUser(User user) throws ResourceNotFoundException {
+    public List<Phoneline> getByUser(User user) throws ResourceNotFoundException {
         return Optional.ofNullable(phonelineRepository.findByUser(user))
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Resource Phoneline not found with User (id:%d)", user.getId())));
+                .orElseThrow(() -> new ResourceNotFoundException("Resource not found with User (id:%d)", user.getId()));
     }
 
-    public Phoneline newPhoneline(Phoneline phoneline) throws ResourceAlreadyExistsException, ResourceNotFoundException {
+    public Phoneline newPhoneline(Phoneline phoneline) throws ResourceAlreadyExistsException {
         if(phonelineRepository.findById(phoneline.getId()) != null)
-            throw new ResourceAlreadyExistsException(String.format("Resource Phoneline already exists with (id:%d)", phoneline.getId()));
+            throw new ResourceAlreadyExistsException(String.format("Resource already exists with (id:%d)", phoneline.getId()));
         return phonelineRepository.save(phoneline);
     }
 }

@@ -22,6 +22,6 @@ public class RateService implements IRateService {
 
     public List<Rate> getAll() throws ResourceNotFoundException {
         return Optional.ofNullable(rateRepository.findAll())
-            .orElseThrow(() -> new ResourceNotFoundException(String.format("Resource Rate not found")));
+            .orElseThrow(() -> new ResourceNotFoundException());
     }
 }
