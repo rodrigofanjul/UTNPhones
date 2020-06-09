@@ -8,30 +8,4 @@ Link to PDF with assignments:
 
 All possible operations are listed below:
 
-### Users  
-> GET localhost:8080/users  
-> GET localhost:8080/users/{id}  
-> GET localhost:8080/users/{id}/invoices  
-> GET localhost:8080/users/{id}/invoices/between  
-> GET localhost:8080/users/{id}/calls  
-> GET localhost:8080/users/{id}/calls/between  
-> GET localhost:8080/users/{id}/calls/mostcalled  
-> POST localhost:8080/users/register/  
-> POST localhost:8080/users/login/  
-> PUT localhost:8080/users/{id}  
-
-### Calls  
-> GET localhost:8080/calls  
-> POST localhost:8080/calls  
-
-### Invoices  
-> GET localhost:8080/invoices  
-
-### Phonelines  
-> GET localhost:8080/phonelines  
-> GET localhost:8080/phonelines/{id}  
-> POST localhost:8080/phonelines  
-
-### Rates  
-> GET localhost:8080/rates  
-> GET localhost:8080/rates/between  
+> https://www.getpostman.com/collections/24dadc0ae553b25e3650
