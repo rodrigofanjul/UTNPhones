@@ -8,8 +8,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name="rates")
 @AllArgsConstructor
-@NoArgsConstructor
-@Data
+@Getter
 public class Rate {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

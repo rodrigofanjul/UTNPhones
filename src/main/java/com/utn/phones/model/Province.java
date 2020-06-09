@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name="provinces")
 @AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class Province {
     @Id

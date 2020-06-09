@@ -10,7 +10,6 @@ import java.util.Date;
 @Entity
 @Table(name="calls")
 @AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class Call {
     @Id
