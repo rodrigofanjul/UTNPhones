@@ -35,7 +35,7 @@ public class RateWebControllerTest {
     }
 
     @Test
-    public void testGetCallsOk() throws ResourceNotFoundException {
+    public void testGetRatesOk() throws ResourceNotFoundException {
         try {
             when(rateController.getRates()).thenReturn(testRates);
             ResponseEntity<List<Rate>> response = rateWebController.getRates();
@@ -51,7 +51,7 @@ public class RateWebControllerTest {
     }
 
     @Test(expected = ResourceNotFoundException.class)
-    public void testGetCallsNotFound() throws ResourceNotFoundException {
+    public void testGetRatesNotFound() throws ResourceNotFoundException {
         when(rateController.getRates()).thenThrow(new ResourceNotFoundException());
         ResponseEntity<List<Rate>> response = rateWebController.getRates();
     }

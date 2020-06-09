@@ -29,6 +29,7 @@ public class UserServiceTest {
     IProvinceService provinceService;
     BCryptPasswordEncoder bCryptPasswordEncoder;
     UserService userService;
+
     User testUser;
     User testUser2;
     List<User> testUsers;
@@ -49,7 +50,9 @@ public class UserServiceTest {
     @Test
     public void testGetAllOk() throws ResourceNotFoundException {
         when(userRepository.findAll()).thenReturn(testUsers);
+
         List<User> users = userService.getAll();
+
         assertEquals(1, users.size());
         assertEquals(Integer.valueOf(1), users.get(0).getId());
         assertEquals(Integer.valueOf(123), users.get(0).getIdcard());
@@ -65,7 +68,9 @@ public class UserServiceTest {
     @Test
     public void testGetByIdOk() throws ResourceNotFoundException {
         when(userRepository.findById(1)).thenReturn(Optional.ofNullable(testUser));
+
         User user = userService.getById(1);
+
         assertEquals(Integer.valueOf(1), user.getId());
         assertEquals(Integer.valueOf(123), user.getIdcard());
         verify(userRepository, times(1)).findById(1);
@@ -80,7 +85,9 @@ public class UserServiceTest {
     @Test
     public void testGetByIdCardOk() throws ResourceNotFoundException {
         when(userRepository.findByIdcard(123)).thenReturn(testUser);
+
         User user = userService.getByIdCard(123);
+
         assertEquals(Integer.valueOf(1), user.getId());
         assertEquals(Integer.valueOf(123), user.getIdcard());
         verify(userRepository, times(1)).findByIdcard(123);
@@ -96,7 +103,9 @@ public class UserServiceTest {
     public void testNewUserOk() throws ResourceNotFoundException, ResourceAlreadyExistsException {
         when(userRepository.save(testUser)).thenReturn(testUser);
         when(userRepository.findByIdcard(testUser.getIdcard())).thenReturn(null);
+
         User user = userService.newUser(testUser);
+
         assertEquals(Integer.valueOf(1), user.getId());
         assertEquals(Integer.valueOf(123), user.getIdcard());
         verify(userRepository, times(1)).findByIdcard(testUser.getIdcard());
@@ -121,7 +130,9 @@ public class UserServiceTest {
         when(userRepository.existsById(testUser.getId())).thenReturn(true);
         when(userRepository.findByIdcard(testUser.getIdcard())).thenReturn(null);
         when(userRepository.save(testUser)).thenReturn(testUser);
+
         User user = userService.updateUser(testUser);
+
         assertEquals(Integer.valueOf(1), user.getId());
         assertEquals(Integer.valueOf(123), user.getIdcard());
         verify(userRepository, times(1)).existsById(testUser.getId());

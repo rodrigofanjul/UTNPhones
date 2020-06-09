@@ -35,9 +35,15 @@ public class RateServiceTest {
     @Test
     public void testGetAllOk() throws ResourceNotFoundException {
         when(rateRepository.findAll()).thenReturn(testRates);
+
         List<Rate> rates = rateService.getAll();
+
         assertEquals(1, rates.size());
+        assertEquals(testRates, rates);
         assertEquals(Integer.valueOf(1), rates.get(0).getId());
+        assertEquals(testCity, rates.get(0).getOrigin());
+        assertEquals(testCity, rates.get(0).getDestination());
+        assertEquals(Float.valueOf(1.0f), rates.get(0).getRate());
         verify(rateRepository, times(1)).findAll();
     }
 

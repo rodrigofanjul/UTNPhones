@@ -29,8 +29,11 @@ public class ProvinceServiceTest {
     @Test
     public void testGetByIdOk() throws ResourceNotFoundException {
         when(provinceRepository.findById(1)).thenReturn(Optional.ofNullable(testProvince));
+
         Province province = provinceService.getById(1);
+
         assertEquals(Integer.valueOf(1), province.getId());
+        assertEquals("Buenos Aires", province.getName());
         verify(provinceRepository, times(1)).findById(1);
     }
 

@@ -1,5 +1,6 @@
 package com.utn.phones.service;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.utn.phones.exception.ResourceNotFoundException;
 import com.utn.phones.model.*;
 import com.utn.phones.repository.ICallRepository;
@@ -39,16 +40,25 @@ public class InvoiceServiceTest {
         testDate = new Date();
         testUser = new User(1,new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223),"nombre","apellido",123,"123", EMPLOYEE);
         testPhoneline = new Phoneline(1l,testUser,testUser.getCity(),MOBILE,ACTIVE);
-        testInvoice = new Invoice(1,testPhoneline,1,1f,1.21f,testDate,false,testDate);
+        testInvoice = new Invoice(1,testPhoneline,1,1.0f,1.21f,testDate,false,testDate);
         testInvoices = Arrays.asList(testInvoice);
     }
 
     @Test
     public void testGetAllOk() throws ResourceNotFoundException {
         when(invoiceRepository.findAll()).thenReturn(testInvoices);
+
         List<Invoice> invoices = invoiceService.getAll();
+
         assertEquals(1, invoices.size());
         assertEquals(Integer.valueOf(1), invoices.get(0).getId());
+        assertEquals(testPhoneline, invoices.get(0).getPhoneline());
+        assertEquals(Integer.valueOf(1), invoices.get(0).getCallsQuantity());
+        assertEquals(Float.valueOf(1.0f), invoices.get(0).getCostPrice());
+        assertEquals(Float.valueOf(1.21f), invoices.get(0).getTotalPrice());
+        assertEquals(testDate, invoices.get(0).getDate());
+        assertEquals(Boolean.valueOf(false), invoices.get(0).getIsPaid());
+        assertEquals(testDate, invoices.get(0).getExpirationDate());
         verify(invoiceRepository, times(1)).findAll();
     }
 
@@ -61,8 +71,18 @@ public class InvoiceServiceTest {
     @Test
     public void testGetByUserOk() throws ResourceNotFoundException {
         when(invoiceRepository.findByPhonelineIn(phonelineService.getByUser(testUser))).thenReturn(testInvoices);
+
         List<Invoice> invoices = invoiceService.getByUser(testUser);
+
+        assertEquals(1, invoices.size());
         assertEquals(Integer.valueOf(1), invoices.get(0).getId());
+        assertEquals(testPhoneline, invoices.get(0).getPhoneline());
+        assertEquals(Integer.valueOf(1), invoices.get(0).getCallsQuantity());
+        assertEquals(Float.valueOf(1.0f), invoices.get(0).getCostPrice());
+        assertEquals(Float.valueOf(1.21f), invoices.get(0).getTotalPrice());
+        assertEquals(testDate, invoices.get(0).getDate());
+        assertEquals(Boolean.valueOf(false), invoices.get(0).getIsPaid());
+        assertEquals(testDate, invoices.get(0).getExpirationDate());
         verify(invoiceRepository, times(1)).findByPhonelineIn(phonelineService.getByUser(testUser));
     }
 
@@ -75,8 +95,18 @@ public class InvoiceServiceTest {
     @Test
     public void testGetByUserBetweenOk() throws ResourceNotFoundException {
         when(invoiceRepository.findByPhonelineInAndDateBetween(phonelineService.getByUser(testUser),testDate,testDate)).thenReturn(testInvoices);
+
         List<Invoice> invoices = invoiceService.getByUserBetween(testUser,testDate,testDate);
+
+        assertEquals(1, invoices.size());
         assertEquals(Integer.valueOf(1), invoices.get(0).getId());
+        assertEquals(testPhoneline, invoices.get(0).getPhoneline());
+        assertEquals(Integer.valueOf(1), invoices.get(0).getCallsQuantity());
+        assertEquals(Float.valueOf(1.0f), invoices.get(0).getCostPrice());
+        assertEquals(Float.valueOf(1.21f), invoices.get(0).getTotalPrice());
+        assertEquals(testDate, invoices.get(0).getDate());
+        assertEquals(Boolean.valueOf(false), invoices.get(0).getIsPaid());
+        assertEquals(testDate, invoices.get(0).getExpirationDate());
         verify(invoiceRepository, times(1)).findByPhonelineInAndDateBetween(phonelineService.getByUser(testUser),testDate,testDate);
     }
 

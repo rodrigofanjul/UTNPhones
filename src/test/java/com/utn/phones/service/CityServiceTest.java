@@ -18,20 +18,28 @@ public class CityServiceTest {
     ICityRepository cityRepository;
     CityService cityService;
 
+    Province testProvince;
     City testCity;
 
     @Before
     public void setUp() {
         cityRepository = mock(ICityRepository.class);
         cityService = new CityService(cityRepository);
-        testCity = new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223);
+
+        testProvince = new Province(1,"Buenos Aires");
+        testCity = new City(1,testProvince,"Mar del Plata",223);
     }
 
     @Test
     public void testGetByIdOk() throws ResourceNotFoundException {
         when(cityRepository.findById(1)).thenReturn(Optional.ofNullable(testCity));
+
         City city = cityService.getById(1);
+
         assertEquals(Integer.valueOf(1), city.getId());
+        assertEquals(testProvince, city.getProvince());
+        assertEquals("Mar del Plata", city.getName());
+        assertEquals(Integer.valueOf(223), city.getPrefix());
         verify(cityRepository, times(1)).findById(1);
     }
 

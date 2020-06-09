@@ -1,5 +1,6 @@
 package com.utn.phones.controller;
 
+import com.utn.phones.dto.MostCalledDto;
 import com.utn.phones.exception.ResourceAlreadyExistsException;
 import com.utn.phones.exception.ResourceNotFoundException;
 import com.utn.phones.model.*;
@@ -29,6 +30,8 @@ public class CallControllerTest {
     User testUser;
     Call testCall;
     List<Call> testCalls;
+    MostCalledDto testMostCalledDto;
+    List<MostCalledDto> testMostCalledDtos;
 
     @Before
     public void setUp() {
@@ -42,6 +45,8 @@ public class CallControllerTest {
         testCall = new Call(1,null,testPhoneline,testPhoneline,testDate,1.0f,10,1.0f);
         testInvoice = new Invoice(1,new Phoneline(1l,testUser,testUser.getCity(),MOBILE,ACTIVE),1,1f,1.21f,testDate,false,testDate);
         testCalls = Arrays.asList(testCall);
+        testMostCalledDto = new MostCalledDto(1l,1l,1l);
+        testMostCalledDtos = Arrays.asList(testMostCalledDto);
     }
 
     @Test
@@ -145,45 +150,49 @@ public class CallControllerTest {
         List<Call> calls = callController.getCallsByPhonelineBetween(testPhoneline,testDate,testDate);
     }
 
-//    @Test
-//    public void testGetCallsByUserMostCalledOk() throws ResourceNotFoundException {
-//        try {
-//            when(callService.getByUserMostCalled(testUser)).thenReturn(testCalls);
-//            List<Call> calls = callController.getCallsByUserMostCalled(testUser);
-//            assertEquals(1, calls.size());
-//            assertEquals(Integer.valueOf(1), calls.get(0).getId());
-//            verify(callService, times(1)).getByUserMostCalled(testUser);
-//        }
-//        catch (ResourceNotFoundException ex) {
-//            fail();
-//        }
-//    }
-//
-//    @Test(expected = ResourceNotFoundException.class)
-//    public void testGetCallsByUserMostCalledNotFound() throws ResourceNotFoundException {
-//        when(callService.getByUserMostCalled(testUser)).thenThrow(new ResourceNotFoundException());
-//        List<Call> calls = callController.getCallsByUserMostCalled(testUser);
-//    }
-//
-//    @Test
-//    public void testGetCallsByPhonelineMostCalledOk() throws ResourceNotFoundException {
-//        try {
-//            when(callService.getByPhonelineMostCalled(testPhoneline)).thenReturn(testCalls);
-//            List<Call> calls = callController.getCallsByPhonelineMostCalled(testPhoneline);
-//            assertEquals(1, calls.size());
-//            assertEquals(Integer.valueOf(1), calls.get(0).getId());
-//            verify(callService, times(1)).getByPhonelineMostCalled(testPhoneline);
-//        }
-//        catch (ResourceNotFoundException ex) {
-//            fail();
-//        }
-//    }
-//
-//    @Test(expected = ResourceNotFoundException.class)
-//    public void testGetCallsByPhonelineMostCalledNotFound() throws ResourceNotFoundException {
-//        when(callService.getByPhonelineMostCalled(testPhoneline)).thenThrow(new ResourceNotFoundException());
-//        List<Call> calls = callController.getCallsByPhonelineMostCalled(testPhoneline);
-//    }
+    @Test
+    public void testGetCallsByUserMostCalledOk() throws ResourceNotFoundException {
+        try {
+            when(callService.getByUserMostCalled(testUser)).thenReturn(testMostCalledDtos);
+
+            List<MostCalledDto> calls = callController.getCallsByUserMostCalled(testUser);
+
+            assertEquals(1, calls.size());
+            assertEquals(testMostCalledDto, calls.get(0));
+            verify(callService, times(1)).getByUserMostCalled(testUser);
+        }
+        catch (ResourceNotFoundException ex) {
+            fail();
+        }
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void testGetCallsByUserMostCalledNotFound() throws ResourceNotFoundException {
+        when(callService.getByUserMostCalled(testUser)).thenThrow(new ResourceNotFoundException());
+        List<MostCalledDto> calls = callController.getCallsByUserMostCalled(testUser);
+    }
+
+    @Test
+    public void testGetCallsByPhonelineMostCalledOk() throws ResourceNotFoundException {
+        try {
+            when(callService.getByPhonelineMostCalled(testPhoneline)).thenReturn(testMostCalledDtos);
+
+            List<MostCalledDto> calls = callController.getCallsByPhonelineMostCalled(testPhoneline);
+
+            assertEquals(1, calls.size());
+            assertEquals(testMostCalledDto, calls.get(0));
+            verify(callService, times(1)).getByPhonelineMostCalled(testPhoneline);
+        }
+        catch (ResourceNotFoundException ex) {
+            fail();
+        }
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void testGetCallsByPhonelineMostCalledNotFound() throws ResourceNotFoundException {
+        when(callService.getByPhonelineMostCalled(testPhoneline)).thenThrow(new ResourceNotFoundException());
+        List<MostCalledDto> calls = callController.getCallsByPhonelineMostCalled(testPhoneline);
+    }
 
     @Test
     public void testNewCallOk() throws ResourceNotFoundException {
