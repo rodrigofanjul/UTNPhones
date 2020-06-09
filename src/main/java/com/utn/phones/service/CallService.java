@@ -1,7 +1,6 @@
 package com.utn.phones.service;
 
 import com.utn.phones.dto.MostCalledDto;
-import com.utn.phones.exception.ResourceAlreadyExistsException;
 import com.utn.phones.exception.ResourceNotFoundException;
 import com.utn.phones.model.Call;
 import com.utn.phones.model.Phoneline;
