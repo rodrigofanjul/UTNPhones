@@ -2,8 +2,10 @@ package com.utn.phones.controller.web;
 
 import com.utn.phones.controller.CallController;
 import com.utn.phones.controller.PhonelineController;
+import com.utn.phones.dto.MostCalledDto;
 import com.utn.phones.exception.ResourceAlreadyExistsException;
 import com.utn.phones.exception.ResourceNotFoundException;
+import com.utn.phones.model.Call;
 import com.utn.phones.model.Phoneline;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,31 +47,31 @@ public class PhonelineWebController {
 
     @IsSelfPhonelineOrEmployee
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getPhoneline(@Validated @PathVariable @Min(1) Long id) throws ResourceNotFoundException {
+    public ResponseEntity<Phoneline> getPhonelineById(@Validated @PathVariable @Min(1) Long id) throws ResourceNotFoundException {
         return ResponseEntity.ok(phonelineController.getPhonelineById(id));
     }
 
     @IsSelfPhonelineOrEmployee
     @GetMapping("/{id}/calls")
-    public ResponseEntity<Object> getPhonelineCalls(@Validated @PathVariable @Min(1) Long id) throws ResourceNotFoundException {
+    public ResponseEntity<List<Call>> getPhonelineCalls(@Validated @PathVariable @Min(1) Long id) throws ResourceNotFoundException {
         return ResponseEntity.ok(callController.getCallsByPhoneline(phonelineController.getPhonelineById(id)));
     }
 
     @IsSelfPhonelineOrEmployee
     @GetMapping("/{id}/calls/between")
-    public ResponseEntity<Object> getPhonelineCallsBetween(@Validated @PathVariable @Min(1) Long id, @RequestParam Date start, @RequestParam Date end) throws ResourceNotFoundException {
+    public ResponseEntity<List<Call>> getPhonelineCallsBetween(@Validated @PathVariable @Min(1) Long id, @RequestParam Date start, @RequestParam Date end) throws ResourceNotFoundException {
         return ResponseEntity.ok(callController.getCallsByPhonelineBetween(phonelineController.getPhonelineById(id),start,end));
     }
 
     @IsSelfPhonelineOrEmployee
     @GetMapping("/{id}/calls/most-called")
-    public ResponseEntity<Object> getPhonelineMostCalled(@Validated @PathVariable @Min(1) Long id) throws ResourceNotFoundException {
+    public ResponseEntity<List<MostCalledDto>> getPhonelineMostCalled(@Validated @PathVariable @Min(1) Long id) throws ResourceNotFoundException {
         return ResponseEntity.ok(callController.getCallsByPhonelineMostCalled(phonelineController.getPhonelineById(id)));
     }
 
     @IsEmployee
     @PostMapping
-    public ResponseEntity<Phoneline> newPhoneline(@Valid @RequestBody @NotNull Phoneline phoneline) throws ResourceAlreadyExistsException, ResourceNotFoundException {
+    public ResponseEntity<Phoneline> newPhoneline(@Valid @RequestBody @NotNull Phoneline phoneline) throws ResourceAlreadyExistsException {
         return ResponseEntity.status(HttpStatus.CREATED).body(phonelineController.newPhoneline(phoneline));
     }
 }
