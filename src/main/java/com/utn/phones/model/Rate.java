@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name="rates")
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class Rate {
     @Id

@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name="users")
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class User {
     @Id

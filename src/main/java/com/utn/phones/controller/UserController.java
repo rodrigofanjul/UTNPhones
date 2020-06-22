@@ -3,7 +3,6 @@ package com.utn.phones.controller;
 import com.utn.phones.exception.ResourceAlreadyExistsException;
 import com.utn.phones.exception.ResourceNotFoundException;
 import com.utn.phones.model.User;
-import com.utn.phones.model.User;
 import com.utn.phones.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

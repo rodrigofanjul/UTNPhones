@@ -9,6 +9,7 @@ import java.util.Date;
 @Entity
 @Table(name="invoices")
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class Invoice {
     @Id
