@@ -27,6 +27,7 @@ public class CityServiceTest {
         cityService = new CityService(cityRepository);
 
         testProvince = new Province(1,"Buenos Aires");
+        testCity = new City();
         testCity = new City(1,testProvince,"Mar del Plata",223);
     }
 

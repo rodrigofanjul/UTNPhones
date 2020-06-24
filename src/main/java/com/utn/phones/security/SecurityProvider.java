@@ -9,11 +9,11 @@ import static com.utn.phones.security.SecurityConstants.TOKEN_EXPIRATION_TIME;
 
 public class SecurityProvider {
 
-    public String getToken(String idCard, String role) {
+    public String getToken(String id, String role) {
         return Jwts
                 .builder()
                 .setId("UTN")
-                .setSubject(idCard)
+                .setSubject(id)
                 .claim("authorities", role)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME))

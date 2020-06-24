@@ -33,7 +33,7 @@ public class LoginWebController {
     }
     
     @PostMapping
-    public ResponseEntity<Object> loginUser(@RequestBody @NotNull User user) throws InvalidLoginException, ResourceNotFoundException {
+    public ResponseEntity loginUser(@RequestBody @NotNull User user) throws InvalidLoginException, ResourceNotFoundException {
         User loggedUser = userController.getUserCard(user.getIdcard());
         if(!bCryptPasswordEncoder.matches(user.getPassword(),loggedUser.getPassword())) throw new InvalidLoginException();
         return ResponseEntity.ok().headers(createHeaders(

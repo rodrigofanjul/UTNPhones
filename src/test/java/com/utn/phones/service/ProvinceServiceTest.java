@@ -23,6 +23,7 @@ public class ProvinceServiceTest {
         provinceRepository = mock(IProvinceRepository.class);
         provinceService = new ProvinceService(provinceRepository);
 
+        testProvince = new Province();
         testProvince = new Province(1,"Buenos Aires");
     }
 

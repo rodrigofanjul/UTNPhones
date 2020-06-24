@@ -3,6 +3,7 @@ package com.utn.phones.controller.web;
 import com.utn.phones.controller.CallController;
 import com.utn.phones.controller.UserController;
 import com.utn.phones.controller.InvoiceController;
+import com.utn.phones.dto.MostCalledDto;
 import com.utn.phones.exception.ResourceAlreadyExistsException;
 import com.utn.phones.exception.ResourceNotFoundException;
 import com.utn.phones.model.*;
@@ -33,6 +34,10 @@ public class UserWebControllerTest {
     Phoneline testPhoneline;
     Call testCall;
     List<Call> testCalls;
+    MostCalledDto testMostCalledDto;
+    List<MostCalledDto> testMostCalledDtos;
+    Invoice testInvoice;
+    List<Invoice> testInvoices;
 
     @Before
     public void setUp() {
@@ -48,6 +53,10 @@ public class UserWebControllerTest {
         testPhoneline = new Phoneline(1l,testUser,testUser.getCity(),MOBILE,ACTIVE);
         testCall = new Call(1,null,testPhoneline,testPhoneline,testDate,1.0f,10,1.0f);
         testCalls = Arrays.asList(testCall);
+        testMostCalledDto = new MostCalledDto(1l,1l,1l);
+        testMostCalledDtos = Arrays.asList(testMostCalledDto);
+        testInvoice = new Invoice(1,new Phoneline(1l,testUser,testUser.getCity(),MOBILE,ACTIVE),1,1f,1.21f,new Date(),false,new Date());
+        testInvoices = Arrays.asList(testInvoice);
     }
 
     @Test
@@ -147,6 +156,75 @@ public class UserWebControllerTest {
     public void testGetCallsByUserBetweenNotFound() throws ResourceNotFoundException {
         when(callController.getCallsByUserBetween(userController.getUser(1),testDate,testDate)).thenThrow(new ResourceNotFoundException());
         ResponseEntity<List<Call>> response = userWebController.getUserCallsBetween(1,testDate,testDate);
+    }
+
+    @Test
+    public void testGetCallsByUserMostCalledOk() throws ResourceNotFoundException {
+        try {
+            when(callController.getCallsByUserMostCalled(userController.getUser(1))).thenReturn(testMostCalledDtos);
+
+            ResponseEntity<List<MostCalledDto>> response = userWebController.getCallsByUserMostCalled(1);
+            List<MostCalledDto> callsDto = response.getBody();
+
+            assertEquals(1, callsDto.size());
+            assertEquals(testMostCalledDto, callsDto.get(0));
+            verify(callController, times(1)).getCallsByUserMostCalled(userController.getUser(1));
+        }
+        catch (ResourceNotFoundException ex) {
+            fail();
+        }
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void testGetCallsByUserMostCalledNotFound() throws ResourceNotFoundException {
+        when(callController.getCallsByUserMostCalled(userController.getUser(1))).thenThrow(new ResourceNotFoundException());
+        ResponseEntity<List<MostCalledDto>> response = userWebController.getCallsByUserMostCalled(1);
+    }
+
+    @Test
+    public void testGetInvoicesByUserOk() throws ResourceNotFoundException {
+        try {
+            when(invoiceController.getInvoicesByUser(userController.getUser(1))).thenReturn(testInvoices);
+
+            ResponseEntity<List<Invoice>> response = userWebController.getUserInvoices(1);
+            List<Invoice> invoices = response.getBody();
+
+            assertEquals(1, invoices.size());
+            assertEquals(Integer.valueOf(1), invoices.get(0).getId());
+            verify(invoiceController, times(1)).getInvoicesByUser(userController.getUser(1));
+        }
+        catch (ResourceNotFoundException ex) {
+            fail();
+        }
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void testGetInvoicesByUserNotFound() throws ResourceNotFoundException {
+        when(invoiceController.getInvoicesByUser(userController.getUser(1))).thenThrow(new ResourceNotFoundException());
+        ResponseEntity<List<Invoice>> response = userWebController.getUserInvoices(1);
+    }
+
+    @Test
+    public void testGetInvoicesByUserBetweenOk() throws ResourceNotFoundException {
+        try {
+            when(invoiceController.getInvoicesByUserBetween(userController.getUser(1),testDate,testDate)).thenReturn(testInvoices);
+
+            ResponseEntity<List<Invoice>> response = userWebController.getUserInvoicesBetween(1,testDate,testDate);
+            List<Invoice> invoices = response.getBody();
+
+            assertEquals(1, invoices.size());
+            assertEquals(Integer.valueOf(1), invoices.get(0).getId());
+            verify(invoiceController, times(1)).getInvoicesByUserBetween(userController.getUser(1),testDate,testDate);
+        }
+        catch (ResourceNotFoundException ex) {
+            fail();
+        }
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void testGetInvoicesByUserBetweenNotFound() throws ResourceNotFoundException {
+        when(invoiceController.getInvoicesByUserBetween(userController.getUser(1),testDate,testDate)).thenThrow(new ResourceNotFoundException());
+        ResponseEntity<List<Invoice>> response = userWebController.getUserInvoicesBetween(1,testDate,testDate);
     }
 
     @Test

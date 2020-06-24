@@ -67,7 +67,7 @@ public class UserWebController {
 
     @IsSelfUserOrEmployee
     @GetMapping("/{id}/calls/most-called")
-    public ResponseEntity<List<MostCalledDto>> getUserMostCalled(@Validated @PathVariable @Min(1) int id) throws ResourceNotFoundException {
+    public ResponseEntity<List<MostCalledDto>> getCallsByUserMostCalled(@Validated @PathVariable @Min(1) int id) throws ResourceNotFoundException {
         return ResponseEntity.ok(callController.getCallsByUserMostCalled(userController.getUser(id)));
     }
 
