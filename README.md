@@ -1,11 +1,19 @@
 # UTNPhones
 
+## Assignments
+
 Link to PDF with assignments:
 
-[TP INTEGRADOR BASE DE DATOS/ PROGRAMACIÓN AVANZADA I](https://github.com/rodrigofanjul/UTNPhones/blob/master/docs/PAI%20-%20BD2%20-%20TP%20FINAL%20-%20Borrador.pdf)
- 
-# API Operations
+> [TP INTEGRADOR BASE DE DATOS/ PROGRAMACIÓN AVANZADA I](https://github.com/rodrigofanjul/UTNPhones/blob/master/docs/PAI%20-%20BD2%20-%20TP%20FINAL%20-%20Borrador.pdf)
 
-All possible operations are listed below:
+## Entity Relationship Diagram
 
-> https://www.getpostman.com/collections/24dadc0ae553b25e3650
+![DER](https://github.com/rodrigofanjul/UTNPhones/blob/master/schema/DER.jpg)
+
+## Documentation
+
+All operations listed below:
+
+> [POSTMAN](https://documenter.getpostman.com/view/11243328/SztHWjd1?version=latest)
+
+> [SWAGGER](http://localhost:8080/swagger-ui.html#/)
