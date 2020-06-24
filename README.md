@@ -4,7 +4,7 @@
 
 Link to PDF with assignments:
 
-> [TP INTEGRADOR BASE DE DATOS/ PROGRAMACIÓN AVANZADA I](https://github.com/rodrigofanjul/UTNPhones/blob/master/docs/PAI%20-%20BD2%20-%20TP%20FINAL%20-%20Borrador.pdf)
+> [TP INTEGRADOR BASE DE DATOS/ PROGRAMACIÓN AVANZADA I](https://github.com/rodrigofanjul/UTNPhones/blob/master/docs/PROGRAMACI%C3%93N%20AVANZADA%20I%20-%20TP%20FINAL.pdf)
 
 ## Entity Relationship Diagram
 
