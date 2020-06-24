@@ -1,13 +1,8 @@
 package com.utn.phones.controller.web;
 
-import com.utn.phones.controller.CityController;
-import com.utn.phones.controller.ProvinceController;
-import com.utn.phones.dto.CityDto;
-import com.utn.phones.exception.ResourceNotFoundException;
-import com.utn.phones.model.City;
-import com.utn.phones.model.Rate;
+import com.utn.phones.exception.ApiErrorException;
+import com.utn.phones.service.ProvinceComponent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,19 +20,30 @@ import java.util.List;
 @RequestMapping("/api/provinces")
 public class ProvinceWebController {
 
-    private final ProvinceController provinceController;
-    private final CityController cityController;
+//    private final ProvinceController provinceController;
+//    private final CityController cityController;
+    private final ProvinceComponent provinceComponent;
 
     @Autowired
-    public ProvinceWebController(ProvinceController provinceController, CityController cityController) {
-        this.provinceController = provinceController;
-        this.cityController = cityController;
+    public ProvinceWebController(ProvinceComponent provinceComponent) {
+//        this.provinceController = provinceController;
+//        this.cityController = cityController;
+        this.provinceComponent = provinceComponent;
     }
+
+//    @IsEmployee
+//    @GetMapping("/{id}/cities")
+//    public ResponseEntity<List<CityDto>> getCitiesByProvince(@Validated @PathVariable @Min(1) int id) throws ResourceNotFoundException {
+//        List<CityDto> cities = cityController.getCitiesByProvince(provinceController.getProvinceById(id));
+//        return (cities.size() > 0) ? ResponseEntity.ok(cities) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+//    }
+
+    // Mi nueva "api" se va a comunicar con la primera por medio de RestTemplate para obtener los datos
+    // Por lo tanto debo comentar el método anterior.
 
     @IsEmployee
     @GetMapping("/{id}/cities")
-    public ResponseEntity<List<CityDto>> getCitiesByProvince(@Validated @PathVariable @Min(1) int id) throws ResourceNotFoundException {
-        List<CityDto> cities = cityController.getCitiesByProvince(provinceController.getProvinceById(id));
-        return (cities.size() > 0) ? ResponseEntity.ok(cities) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity<List> getCitiesByProvince(@Validated @PathVariable @Min(1) int id) throws ApiErrorException {
+        return provinceComponent.getCitiesByProvince(id);
     }
 }

@@ -5,6 +5,7 @@ import com.utn.phones.controller.ProvinceController;
 import com.utn.phones.dto.CityDto;
 import com.utn.phones.exception.ResourceNotFoundException;
 import com.utn.phones.model.*;
+import com.utn.phones.service.ProvinceComponent;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
@@ -18,8 +19,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 public class ProvinceWebControllerTest {
-    ProvinceController provinceController;
-    CityController cityController;
+    ProvinceComponent provinceComponent;
     ProvinceWebController provinceWebController;
 
     Province testProvince;
@@ -30,9 +30,8 @@ public class ProvinceWebControllerTest {
 
     @Before
     public void setUp() {
-        provinceController = mock(ProvinceController.class);
-        cityController = mock(CityController.class);
-        provinceWebController = new ProvinceWebController(provinceController,cityController);
+        provinceComponent = mock(ProvinceComponent.class);
+        provinceWebController = new ProvinceWebController(provinceComponent);
 
         testProvince = new Province(1,"Buenos Aires");
         testCity = new City(1, testProvince,"Mar del Plata",223);

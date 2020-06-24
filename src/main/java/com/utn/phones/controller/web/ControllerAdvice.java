@@ -1,6 +1,7 @@
 package com.utn.phones.controller.web;
 
 import com.utn.phones.dto.ErrorResponseDto;
+import com.utn.phones.exception.ApiErrorException;
 import com.utn.phones.exception.InvalidLoginException;
 import com.utn.phones.exception.ResourceAlreadyExistsException;
 import com.utn.phones.exception.ResourceNotFoundException;
@@ -44,5 +45,11 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ErrorResponseDto handleNotFoundException(HttpServletRequest request, ResourceNotFoundException ex) {
         return new ErrorResponseDto(new Date(), HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), ex.getMessage(), request.getRequestURI());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ApiErrorException.class)
+    public ErrorResponseDto handleApiErrorException(HttpServletRequest request, ApiErrorException ex) {
+        return new ErrorResponseDto(new Date(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), ex.getMessage(), request.getRequestURI());
     }
 }
