@@ -37,6 +37,7 @@ public class PhonelineControllerTest {
         phonelineController = new PhonelineController(phonelineService);
         testCity = new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223);
         testUser = new User(1,testCity,"nombre","apellido",123,"123", EMPLOYEE);
+        testPhoneline = new Phoneline();
         testPhoneline = new Phoneline(1l,testUser,testCity,MOBILE,ACTIVE);
         testPhonelines = Arrays.asList(testPhoneline);
     }

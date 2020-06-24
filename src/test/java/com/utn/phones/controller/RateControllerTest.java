@@ -32,6 +32,7 @@ public class RateControllerTest {
         rateController = new RateController(rateService);
 
         testCity = new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223);
+        testRate = new Rate();
         testRate = new Rate(1,testCity,testCity,1.0f);
         testRates = Arrays.asList(testRate);
     }

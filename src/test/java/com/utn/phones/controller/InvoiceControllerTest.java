@@ -3,6 +3,7 @@ package com.utn.phones.controller;
 import com.utn.phones.exception.ResourceNotFoundException;
 import com.utn.phones.model.*;
 import com.utn.phones.service.InvoiceService;
+import io.swagger.models.auth.In;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,6 +34,7 @@ public class InvoiceControllerTest {
 
         testUser = new User(1,new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223),"nombre","apellido",123,"123", EMPLOYEE);
         testDate = new Date();
+        testInvoice = new Invoice();
         testInvoice = new Invoice(1,new Phoneline(1l,testUser,testUser.getCity(),MOBILE,ACTIVE),1,1f,1.21f,new Date(),false,new Date());
         testInvoices = Arrays.asList(testInvoice);
     }

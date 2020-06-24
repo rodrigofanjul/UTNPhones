@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
@@ -42,6 +43,7 @@ public class UserServiceTest {
         bCryptPasswordEncoder = mock(BCryptPasswordEncoder.class);
         userService = new UserService(userRepository,cityService,provinceService,bCryptPasswordEncoder);
 
+        testUser = new User();
         testUser = new User(1,new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223),"nombre","apellido",123,"123", EMPLOYEE);
         testUser2 = new User(2,new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223),"nombre","apellido",123,"123", EMPLOYEE);
         testUsers = Arrays.asList(testUser);
@@ -151,5 +153,23 @@ public class UserServiceTest {
         when(userRepository.existsById(testUser.getId())).thenReturn(true);
         when(userRepository.findByIdcard(testUser.getIdcard())).thenReturn(testUser2);
         User user = userService.updateUser(testUser);
+    }
+
+    @Test
+    public void testDeleteUserOk() throws ResourceNotFoundException {
+        try {
+            when(userRepository.existsById(1)).thenReturn(true);
+            userService.deleteUser(testUser);
+            verify(userRepository, times(1)).delete(testUser);
+        }
+        catch (ResourceNotFoundException ex) {
+            fail();
+        }
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void testDeleteUserNotFound() throws ResourceNotFoundException {
+        when(userRepository.existsById(1)).thenReturn(false);
+        userService.deleteUser(testUser);
     }
 }

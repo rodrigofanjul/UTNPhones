@@ -34,7 +34,7 @@ public class LoginWebController {
     
     @PostMapping
     public ResponseEntity<Object> loginUser(@RequestBody @NotNull User user) throws InvalidLoginException, ResourceNotFoundException {
-        User loggedUser = userController.getUserByIdCard(user.getIdcard());
+        User loggedUser = userController.getUserCard(user.getIdcard());
         if(!bCryptPasswordEncoder.matches(user.getPassword(),loggedUser.getPassword())) throw new InvalidLoginException();
         return ResponseEntity.ok().headers(createHeaders(
                 securityProvider.getToken(loggedUser.getId().toString(),loggedUser.getRole().toString()))).build();

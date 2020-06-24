@@ -23,11 +23,11 @@ public class UserController {
         return userService.getAll();
     }
 
-    public User getUserById(int id) throws ResourceNotFoundException {
+    public User getUser(int id) throws ResourceNotFoundException {
         return userService.getById(id);
     }
 
-    public User getUserByIdCard(int idCard) throws ResourceNotFoundException {
+    public User getUserCard(int idCard) throws ResourceNotFoundException {
         return userService.getByIdCard(idCard);
     }
 
@@ -37,5 +37,9 @@ public class UserController {
 
     public User updateUser(User user) throws ResourceNotFoundException, ResourceAlreadyExistsException {
         return userService.updateUser(user);
+    }
+
+    public void deleteUser(User user) throws ResourceNotFoundException {
+        userService.deleteUser(user);
     }
 }

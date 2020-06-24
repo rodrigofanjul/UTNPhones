@@ -42,6 +42,7 @@ public class CallControllerTest {
         testCity = new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223);
         testUser = new User(1, testCity,"nombre","apellido",123,"123", EMPLOYEE);
         testPhoneline = new Phoneline(1l,testUser,testUser.getCity(),MOBILE,ACTIVE);
+        testCall = new Call();
         testCall = new Call(1,null,testPhoneline,testPhoneline,testDate,1.0f,10,1.0f);
         testInvoice = new Invoice(1,new Phoneline(1l,testUser,testUser.getCity(),MOBILE,ACTIVE),1,1f,1.21f,testDate,false,testDate);
         testCalls = Arrays.asList(testCall);

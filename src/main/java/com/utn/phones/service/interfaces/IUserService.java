@@ -12,4 +12,5 @@ public interface IUserService {
     User getByIdCard(int id) throws ResourceNotFoundException;
     User newUser(User user) throws ResourceAlreadyExistsException, ResourceNotFoundException;
     User updateUser(User user) throws ResourceAlreadyExistsException, ResourceNotFoundException;
+    void deleteUser(User user) throws ResourceNotFoundException;
 }

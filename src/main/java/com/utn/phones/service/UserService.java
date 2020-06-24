@@ -63,4 +63,10 @@ public class UserService implements IUserService {
         user.setCity(cityService.getById(user.getCity().getId()));
         return userRepository.save(user);
     }
+
+    public void deleteUser(User user) throws ResourceNotFoundException {
+        if(!userRepository.existsById(user.getId()))
+            throw new ResourceNotFoundException("Resource User not found with (id:%d)",user.getId());
+        userRepository.delete(user);
+    }
 }

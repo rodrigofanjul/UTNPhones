@@ -26,6 +26,7 @@ public class UserControllerTest {
 
     UserService userService;
     UserController userController;
+
     User testUser;
     List<User> testUsers;
 
@@ -34,6 +35,7 @@ public class UserControllerTest {
         userService = mock(UserService.class);
         userController = new UserController(userService);
 
+        testUser = new User();
         testUser = new User(1,new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223),"nombre","apellido",123,"123", EMPLOYEE);
         testUsers = Arrays.asList(testUser);
     }
@@ -60,10 +62,10 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testGetUserByIdOk() throws ResourceNotFoundException {
+    public void testGetUserOk() throws ResourceNotFoundException {
         try {
             when(userService.getById(1)).thenReturn(testUser);
-            User user = userController.getUserById(1);
+            User user = userController.getUser(1);
             assertEquals(Integer.valueOf(1), user.getId());
             assertEquals(Integer.valueOf(123), user.getIdcard());
             verify(userService, times(1)).getById(1);
@@ -74,16 +76,16 @@ public class UserControllerTest {
     }
 
     @Test(expected = ResourceNotFoundException.class)
-    public void testGetUserByIdNotFound() throws ResourceNotFoundException {
+    public void testGetUserNotFound() throws ResourceNotFoundException {
         when(userService.getById(1)).thenThrow(new ResourceNotFoundException());
-        User user = userController.getUserById(1);
+        User user = userController.getUser(1);
     }
 
     @Test
-    public void testGetUserByIdCardOk() throws ResourceNotFoundException {
+    public void testGetUserCardOk() throws ResourceNotFoundException {
         try {
             when(userService.getByIdCard(123)).thenReturn(testUser);
-            User user = userController.getUserByIdCard(123);
+            User user = userController.getUserCard(123);
             assertEquals(Integer.valueOf(1), user.getId());
             assertEquals(Integer.valueOf(123), user.getIdcard());
             verify(userService, times(1)).getByIdCard(123);
@@ -94,9 +96,9 @@ public class UserControllerTest {
     }
 
     @Test(expected = ResourceNotFoundException.class)
-    public void testGetUserByIdCardNotFound() throws ResourceNotFoundException {
+    public void testGetUserCardNotFound() throws ResourceNotFoundException {
         when(userService.getByIdCard(123)).thenThrow(new ResourceNotFoundException());
-        User user = userController.getUserByIdCard(123);
+        User user = userController.getUserCard(123);
     }
 
     @Test
@@ -149,5 +151,22 @@ public class UserControllerTest {
     public void testUpdateUserAlreadyExists() throws ResourceAlreadyExistsException, ResourceNotFoundException {
         when(userService.updateUser(testUser)).thenThrow(new ResourceAlreadyExistsException());
         User user = userController.updateUser(testUser);
+    }
+
+    @Test
+    public void testDeleteUserOk() throws ResourceNotFoundException {
+        try {
+            userController.deleteUser(testUser);
+            verify(userService, times(1)).deleteUser(testUser);
+        }
+        catch (ResourceNotFoundException ex) {
+            fail();
+        }
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void testDeleteUserNotFound() throws ResourceNotFoundException {
+        doThrow(new ResourceNotFoundException()).when(userService).deleteUser(testUser);
+        userController.deleteUser(testUser);
     }
 }
