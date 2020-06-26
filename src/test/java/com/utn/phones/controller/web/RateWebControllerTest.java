@@ -2,6 +2,7 @@ package com.utn.phones.controller.web;
 
 import com.utn.phones.controller.RateController;
 import com.utn.phones.model.City;
+import com.utn.phones.model.Invoice;
 import com.utn.phones.model.Province;
 import com.utn.phones.model.Rate;
 import org.junit.Before;
@@ -9,6 +10,7 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -38,11 +40,23 @@ public class RateWebControllerTest {
     @Test
     public void testGetRatesOk() {
         when(rateController.getRates()).thenReturn(testRates);
+
         ResponseEntity<List<Rate>> response = rateWebController.getRates();
+
         assertEquals(HttpStatus.OK,response.getStatusCode());
         assertEquals(1, Objects.requireNonNull(response.getBody()).size());
         assertEquals(Integer.valueOf(1), response.getBody().get(0).getId());
         assertEquals(Float.valueOf(1.0f), response.getBody().get(0).getRate());
+        verify(rateController, times(1)).getRates();
+    }
+
+    @Test
+    public void testGetInvoicesNoContent() {
+        when(rateController.getRates()).thenReturn(new ArrayList<>());
+
+        ResponseEntity<List<Rate>> response = rateWebController.getRates();
+
+        assertEquals(HttpStatus.NO_CONTENT,response.getStatusCode());
         verify(rateController, times(1)).getRates();
     }
 }

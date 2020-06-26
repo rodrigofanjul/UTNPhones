@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -77,6 +78,16 @@ public class UserWebControllerTest {
     }
 
     @Test
+    public void testGetUsersNoContent() {
+        when(userController.getUsers()).thenReturn(new ArrayList<>());
+
+        ResponseEntity<List<User>> response = userWebController.getUsers();
+
+        assertEquals(HttpStatus.NO_CONTENT,response.getStatusCode());
+        verify(userController, times(1)).getUsers();
+    }
+
+    @Test
     public void testGetUserOk() throws ResourceNotFoundException {
         when(userController.getUser(1)).thenReturn(testUser);
 
@@ -111,6 +122,16 @@ public class UserWebControllerTest {
         verify(callController, times(1)).getCallsByUser(userController.getUser(1));
     }
 
+    @Test
+    public void testGetCallsByUserNoContent() throws ResourceNotFoundException {
+        when(callController.getCallsByUser(userController.getUser(1))).thenReturn(new ArrayList<>());
+
+        ResponseEntity<List<Call>> response = userWebController.getUserCalls(1);
+
+        assertEquals(HttpStatus.NO_CONTENT,response.getStatusCode());
+        verify(callController, times(1)).getCallsByUser(userController.getUser(1));
+    }
+
     @Test(expected = ResourceNotFoundException.class)
     public void testGetCallsByUserNotFound() throws ResourceNotFoundException {
         when(callController.getCallsByUser(userController.getUser(1))).thenThrow(new ResourceNotFoundException());
@@ -127,6 +148,16 @@ public class UserWebControllerTest {
         assert calls != null;
         assertEquals(1, calls.size());
         assertEquals(Integer.valueOf(1), calls.get(0).getId());
+        verify(callController, times(1)).getCallsByUserBetween(userController.getUser(1),testDate,testDate);
+    }
+
+    @Test
+    public void testGetCallsByUserBetweenNoContent() throws ResourceNotFoundException {
+        when(callController.getCallsByUserBetween(userController.getUser(1),testDate,testDate)).thenReturn(new ArrayList<>());
+
+        ResponseEntity<List<Call>> response = userWebController.getUserCallsBetween(1,testDate,testDate);
+
+        assertEquals(HttpStatus.NO_CONTENT,response.getStatusCode());
         verify(callController, times(1)).getCallsByUserBetween(userController.getUser(1),testDate,testDate);
     }
 
@@ -149,6 +180,16 @@ public class UserWebControllerTest {
         verify(callController, times(1)).getCallsByUserMostCalled(userController.getUser(1));
     }
 
+    @Test
+    public void testGetPhonelineMostCalledNoContent() throws ResourceNotFoundException {
+        when(callController.getCallsByUserMostCalled(userController.getUser(1))).thenReturn(new ArrayList<>());
+
+        ResponseEntity<List<MostCalledDto>> response = userWebController.getCallsByUserMostCalled(1);
+
+        assertEquals(HttpStatus.NO_CONTENT,response.getStatusCode());
+        verify(callController, times(1)).getCallsByUserMostCalled(userController.getUser(1));
+    }
+
     @Test(expected = ResourceNotFoundException.class)
     public void testGetCallsByUserMostCalledNotFound() throws ResourceNotFoundException {
         when(callController.getCallsByUserMostCalled(userController.getUser(1))).thenThrow(new ResourceNotFoundException());
@@ -168,6 +209,16 @@ public class UserWebControllerTest {
         verify(invoiceController, times(1)).getInvoicesByUser(userController.getUser(1));
     }
 
+    @Test
+    public void testGetInvoicesByUserNoContent() throws ResourceNotFoundException {
+        when(invoiceController.getInvoicesByUser(userController.getUser(1))).thenReturn(new ArrayList<>());
+
+        ResponseEntity<List<Invoice>> response = userWebController.getUserInvoices(1);
+
+        assertEquals(HttpStatus.NO_CONTENT,response.getStatusCode());
+        verify(invoiceController, times(1)).getInvoicesByUser(userController.getUser(1));
+    }
+
     @Test(expected = ResourceNotFoundException.class)
     public void testGetInvoicesByUserNotFound() throws ResourceNotFoundException {
         when(invoiceController.getInvoicesByUser(userController.getUser(1))).thenThrow(new ResourceNotFoundException());
@@ -184,6 +235,16 @@ public class UserWebControllerTest {
         assert invoices != null;
         assertEquals(1, invoices.size());
         assertEquals(Integer.valueOf(1), invoices.get(0).getId());
+        verify(invoiceController, times(1)).getInvoicesByUserBetween(userController.getUser(1),testDate,testDate);
+    }
+
+    @Test
+    public void testGetInvoicesByUserBetweenNoContent() throws ResourceNotFoundException {
+        when(invoiceController.getInvoicesByUserBetween(userController.getUser(1),testDate,testDate)).thenReturn(new ArrayList<>());
+
+        ResponseEntity<List<Invoice>> response = userWebController.getUserInvoicesBetween(1,testDate,testDate);
+
+        assertEquals(HttpStatus.NO_CONTENT,response.getStatusCode());
         verify(invoiceController, times(1)).getInvoicesByUserBetween(userController.getUser(1),testDate,testDate);
     }
 

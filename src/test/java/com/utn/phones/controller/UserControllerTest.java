@@ -46,14 +46,6 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testGetUsersNoContent() {
-        when(userService.getAll()).thenReturn(new ArrayList<>());
-        List<User> response = userController.getUsers();
-        assertEquals(0,response.size());
-        verify(userService, times(1)).getAll();
-    }
-
-    @Test
     public void testGetUserOk() throws ResourceNotFoundException {
         when(userService.getById(1)).thenReturn(testUser);
         User user = userController.getUser(1);

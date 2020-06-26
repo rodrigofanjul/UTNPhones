@@ -46,7 +46,9 @@ public class CallWebControllerTest {
     @Test
     public void testGetCallsOk() {
         when(callController.getCalls()).thenReturn(testCalls);
+
         ResponseEntity<List<Call>> response = callWebController.getCalls();
+
         assertEquals(HttpStatus.OK,response.getStatusCode());
         assertEquals(1, Objects.requireNonNull(response.getBody()).size());
         assertEquals(Integer.valueOf(1), response.getBody().get(0).getId());
@@ -56,9 +58,10 @@ public class CallWebControllerTest {
 
     @Test
     public void testGetCallsNoContent() {
-        List<Call> calls = new ArrayList<>();
-        when(callController.getCalls()).thenReturn(calls);
+        when(callController.getCalls()).thenReturn(new ArrayList<>());
+
         ResponseEntity<List<Call>> response = callWebController.getCalls();
+
         assertEquals(HttpStatus.NO_CONTENT,response.getStatusCode());
         verify(callController, times(1)).getCalls();
     }
@@ -66,7 +69,10 @@ public class CallWebControllerTest {
     @Test
     public void testNewCallOk() throws ResourceNotFoundException {
         when(callController.newCall(testCall)).thenReturn(testCall);
+
         ResponseEntity<Call> response = callWebController.newCall(testCall);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(Integer.valueOf(1), Objects.requireNonNull(response.getBody()).getId());
         assertEquals(testPhoneline, response.getBody().getOrigin());
         verify(callController, times(1)).newCall(testCall);

@@ -114,6 +114,18 @@ public class PhonelineWebControllerTest {
         verify(callController, times(1)).getCallsByPhoneline(testPhoneline);
     }
 
+    @Test
+    public void testGetPhonelineCallsNoContent() throws ResourceNotFoundException {
+        when(phonelineController.getPhonelineById(1L)).thenReturn(testPhoneline);
+        when(callController.getCallsByPhoneline(testPhoneline)).thenReturn(new ArrayList<>());
+
+        ResponseEntity<List<Call>> response = phonelineWebController.getPhonelineCalls(1L);
+
+        assertEquals(HttpStatus.NO_CONTENT,response.getStatusCode());
+        verify(phonelineController, times(1)).getPhonelineById(1L);
+        verify(callController, times(1)).getCallsByPhoneline(testPhoneline);
+    }
+
     @Test(expected = ResourceNotFoundException.class)
     public void testGetPhonelineCallsNotFound() throws ResourceNotFoundException {
         when(callController.getCallsByPhoneline(phonelineController.getPhonelineById(1L))).thenThrow(new ResourceNotFoundException());
@@ -136,6 +148,18 @@ public class PhonelineWebControllerTest {
         verify(callController, times(1)).getCallsByPhonelineBetween(testPhoneline,testDate,testDate);
     }
 
+    @Test
+    public void testGetPhonelineCallsBetweenNoContent() throws ResourceNotFoundException {
+        when(phonelineController.getPhonelineById(1L)).thenReturn(testPhoneline);
+        when(callController.getCallsByPhonelineBetween(testPhoneline,testDate,testDate)).thenReturn(new ArrayList<>());
+
+        ResponseEntity<List<Call>> response = phonelineWebController.getPhonelineCallsBetween(1L,testDate,testDate);
+
+        assertEquals(HttpStatus.NO_CONTENT,response.getStatusCode());
+        verify(phonelineController, times(1)).getPhonelineById(1L);
+        verify(callController, times(1)).getCallsByPhonelineBetween(testPhoneline,testDate,testDate);
+    }
+
     @Test(expected = ResourceNotFoundException.class)
     public void testGetPhonelineCallsBetweenNotFound() throws ResourceNotFoundException {
         when(callController.getCallsByPhonelineBetween(phonelineController.getPhonelineById(1L),testDate,testDate)).thenThrow(new ResourceNotFoundException());
@@ -152,6 +176,18 @@ public class PhonelineWebControllerTest {
         assertEquals(HttpStatus.OK,response.getStatusCode());
         assertEquals(testMostCalledDtos, response.getBody());
         assertEquals(Long.valueOf(1), Objects.requireNonNull(Objects.requireNonNull(response.getBody())).get(0).getDestination());
+        verify(phonelineController, times(1)).getPhonelineById(1L);
+        verify(callController, times(1)).getCallsByPhonelineMostCalled(testPhoneline);
+    }
+
+    @Test
+    public void testGetPhonelineMostCalledNoContent() throws ResourceNotFoundException {
+        when(phonelineController.getPhonelineById(1L)).thenReturn(testPhoneline);
+        when(callController.getCallsByPhonelineMostCalled(testPhoneline)).thenReturn(new ArrayList<>());
+
+        ResponseEntity<List<MostCalledDto>> response = phonelineWebController.getPhonelineMostCalled(1L);
+
+        assertEquals(HttpStatus.NO_CONTENT,response.getStatusCode());
         verify(phonelineController, times(1)).getPhonelineById(1L);
         verify(callController, times(1)).getCallsByPhonelineMostCalled(testPhoneline);
     }
