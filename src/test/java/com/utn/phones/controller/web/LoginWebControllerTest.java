@@ -9,13 +9,12 @@ import com.utn.phones.model.User;
 import com.utn.phones.security.SecurityProvider;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.List;
-
 import static com.utn.phones.model.User.Role.EMPLOYEE;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class LoginWebControllerTest {
@@ -38,31 +37,27 @@ public class LoginWebControllerTest {
     }
 
     @Test
-    public void testLoginUserOk() throws ResourceNotFoundException {
-        try {
-            when(userController.getUserCard(123)).thenReturn(testUser);
-            when(bCryptPasswordEncoder.matches("123","123")).thenReturn(true);
+    public void testLoginUserOk() throws ResourceNotFoundException, InvalidLoginException {
+        when(userController.getUserCard(123)).thenReturn(testUser);
+        when(bCryptPasswordEncoder.matches("123","123")).thenReturn(true);
 
-            ResponseEntity<List<User>> response = loginWebController.loginUser(testUser);
+        ResponseEntity<Object> response = loginWebController.loginUser(testUser);
 
-            verify(userController, times(1)).getUserCard(123);
-            verify(securityProvider, times(1)).getToken("1","EMPLOYEE");
-        }
-        catch (ResourceNotFoundException | InvalidLoginException ex) {
-            fail();
-        }
+        assertEquals(HttpStatus.OK,response.getStatusCode());
+        verify(userController, times(1)).getUserCard(123);
+        verify(securityProvider, times(1)).getToken("1","EMPLOYEE");
     }
 
     @Test(expected = ResourceNotFoundException.class)
     public void testLoginUserNotFound() throws ResourceNotFoundException, InvalidLoginException {
         when(userController.getUserCard(123)).thenThrow(new ResourceNotFoundException());
-        ResponseEntity response = loginWebController.loginUser(testUser);
+        loginWebController.loginUser(testUser);
     }
 
     @Test(expected = InvalidLoginException.class)
     public void testLoginUserInvalidLogin() throws ResourceNotFoundException, InvalidLoginException {
         when(userController.getUserCard(123)).thenReturn(testUser);
         when(bCryptPasswordEncoder.matches("123","123")).thenReturn(false);
-        ResponseEntity response = loginWebController.loginUser(testUser);
+        loginWebController.loginUser(testUser);
     }
 }

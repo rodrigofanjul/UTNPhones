@@ -7,7 +7,7 @@ import com.utn.phones.model.User;
 import java.util.List;
 
 public interface IUserService {
-    List<User> getAll() throws ResourceNotFoundException;
+    List<User> getAll();
     User getById(int id) throws ResourceNotFoundException;
     User getByIdCard(int id) throws ResourceNotFoundException;
     User newUser(User user) throws ResourceAlreadyExistsException, ResourceNotFoundException;

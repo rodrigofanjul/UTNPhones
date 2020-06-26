@@ -40,7 +40,7 @@ public class ProvinceServiceTest {
 
     @Test(expected = ResourceNotFoundException.class)
     public void testGetByIdNotFound() throws ResourceNotFoundException {
-        when(provinceRepository.findById(1)).thenReturn(Optional.ofNullable(null));
-        Province province = provinceService.getById(1);
+        when(provinceRepository.findById(1)).thenReturn(Optional.empty());
+        provinceService.getById(1);
     }
 }

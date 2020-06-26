@@ -4,6 +4,7 @@ import com.utn.phones.dto.ErrorResponseDto;
 import com.utn.phones.exception.InvalidLoginException;
 import com.utn.phones.exception.ResourceAlreadyExistsException;
 import com.utn.phones.exception.ResourceNotFoundException;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         return new ResponseEntity<>(new ErrorResponseDto(new Date(), status.value(), status.getReasonPhrase(),
-                ex.getBindingResult().getFieldErrors().stream().map(x -> x.getDefaultMessage())
+                ex.getBindingResult().getFieldErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.toList()).toString(), ((HttpServletRequest)request).getRequestURI()), headers, status);
     }
 

@@ -19,7 +19,7 @@ public class PhonelineController {
         this.phonelineService = phonelineService;
     }
 
-    public List<Phoneline> getPhonelines() throws ResourceNotFoundException {
+    public List<Phoneline> getPhonelines() {
         return phonelineService.getAll();
     }
 

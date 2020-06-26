@@ -32,7 +32,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         try {
-            if (existJWTToken(request, response)) {
+            if (existJWTToken(request)) {
                 Claims claims = validateToken(request);
                 if (claims.get("authorities") != null) {
                     Authentication auth = setUpSpringAuthentication(claims);
@@ -46,15 +46,13 @@ public class SecurityFilter extends OncePerRequestFilter {
         }
         catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
-            return;
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
         }
     }
 
-    private boolean existJWTToken(HttpServletRequest request, HttpServletResponse res) {
+    private boolean existJWTToken(HttpServletRequest request) {
         String authenticationHeader = request.getHeader(HEADER_AUTHORIZATION_KEY);
-        if (authenticationHeader == null || !authenticationHeader.startsWith(TOKEN_BEARER_PREFIX)) return false;
-        return true;
+        return authenticationHeader != null && authenticationHeader.startsWith(TOKEN_BEARER_PREFIX);
     }
 
     private Claims validateToken(HttpServletRequest request) {
@@ -66,7 +64,6 @@ public class SecurityFilter extends OncePerRequestFilter {
     {
         Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get("authorities")
                 .toString().split(",")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(claims.getSubject(), null, authorities);
-        return auth;
+        return new UsernamePasswordAuthenticationToken(claims.getSubject(), null, authorities);
     }
 }

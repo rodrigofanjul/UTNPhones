@@ -2,14 +2,15 @@ package com.utn.phones.service;
 
 import com.utn.phones.exception.ResourceAlreadyExistsException;
 import com.utn.phones.exception.ResourceNotFoundException;
-import com.utn.phones.model.*;
+import com.utn.phones.model.City;
+import com.utn.phones.model.Phoneline;
+import com.utn.phones.model.Province;
+import com.utn.phones.model.User;
 import com.utn.phones.repository.IPhonelineRepository;
-import com.utn.phones.repository.IPhonelineRepository;
-import com.utn.phones.service.interfaces.IPhonelineService;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -37,12 +38,12 @@ public class PhonelineServiceTest {
 
         testDate = new Date();
         testUser = new User(1,new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223),"nombre","apellido",123,"123", EMPLOYEE);
-        testPhoneline = new Phoneline(1l,testUser,testUser.getCity(),MOBILE,ACTIVE);
-        testPhonelines = Arrays.asList(testPhoneline);
+        testPhoneline = new Phoneline(1L,testUser,testUser.getCity(),MOBILE,ACTIVE);
+        testPhonelines = Collections.singletonList(testPhoneline);
     }
 
     @Test
-    public void testGetAllOk() throws ResourceNotFoundException {
+    public void testGetAllOk() {
         when(phonelineRepository.findAll()).thenReturn(testPhonelines);
         List<Phoneline> phonelines = phonelineService.getAll();
         assertEquals(1, phonelines.size());
@@ -50,24 +51,18 @@ public class PhonelineServiceTest {
         verify(phonelineRepository, times(1)).findAll();
     }
 
-    @Test(expected = ResourceNotFoundException.class)
-    public void testGetAllNotFound() throws ResourceNotFoundException {
-        when(phonelineRepository.findAll()).thenReturn(null);
-        List<Phoneline> phonelines = phonelineService.getAll();
-    }
-
     @Test
     public void testGetByIdOk() throws ResourceNotFoundException {
-        when(phonelineRepository.findById(1l)).thenReturn(testPhoneline);
-        Phoneline phoneline = phonelineService.getById(1l);
+        when(phonelineRepository.findById(1L)).thenReturn(testPhoneline);
+        Phoneline phoneline = phonelineService.getById(1L);
         assertEquals(Long.valueOf(1), phoneline.getId());
-        verify(phonelineRepository, times(1)).findById(1l);
+        verify(phonelineRepository, times(1)).findById(1L);
     }
 
     @Test(expected = ResourceNotFoundException.class)
     public void testGetByIdNotFound() throws ResourceNotFoundException {
-        when(phonelineRepository.findById(1)).thenReturn(Optional.ofNullable(null));
-        Phoneline phoneline = phonelineService.getById(1l);
+        when(phonelineRepository.findById(1)).thenReturn(Optional.empty());
+        phonelineService.getById(1L);
     }
 
     @Test
@@ -82,7 +77,7 @@ public class PhonelineServiceTest {
     @Test(expected = ResourceNotFoundException.class)
     public void testGetByUserNotFound() throws ResourceNotFoundException {
         when(phonelineRepository.findByUser(testUser)).thenReturn(null);
-        List<Phoneline> phonelines = phonelineService.getByUser(testUser);
+        phonelineService.getByUser(testUser);
     }
 
     @Test
@@ -97,6 +92,6 @@ public class PhonelineServiceTest {
     @Test(expected = ResourceAlreadyExistsException.class)
     public void testNewPhonelineAlreadyExists() throws ResourceAlreadyExistsException {
         when(phonelineRepository.findById(testPhoneline.getId())).thenReturn(testPhoneline);
-        Phoneline phoneline = phonelineService.newPhoneline(testPhoneline);
+        phonelineService.newPhoneline(testPhoneline);
     }
 }

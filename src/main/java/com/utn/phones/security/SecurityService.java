@@ -1,8 +1,6 @@
 package com.utn.phones.security;
 
-import com.utn.phones.controller.PhonelineController;
 import com.utn.phones.exception.ResourceNotFoundException;
-import com.utn.phones.model.Phoneline;
 import com.utn.phones.service.PhonelineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

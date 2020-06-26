@@ -1,18 +1,19 @@
 package com.utn.phones.controller.web;
 
 import com.utn.phones.controller.RateController;
-import com.utn.phones.exception.ResourceNotFoundException;
-import com.utn.phones.model.*;
+import com.utn.phones.model.City;
+import com.utn.phones.model.Province;
+import com.utn.phones.model.Rate;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 public class RateWebControllerTest {
@@ -31,28 +32,17 @@ public class RateWebControllerTest {
 
         testCity = new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223);
         testRate = new Rate(1,testCity,testCity,1.0f);
-        testRates = Arrays.asList(testRate);
+        testRates = Collections.singletonList(testRate);
     }
 
     @Test
-    public void testGetRatesOk() throws ResourceNotFoundException {
-        try {
-            when(rateController.getRates()).thenReturn(testRates);
-            ResponseEntity<List<Rate>> response = rateWebController.getRates();
-            assertEquals(HttpStatus.OK,response.getStatusCode());
-            assertEquals(1, response.getBody().size());
-            assertEquals(Integer.valueOf(1), response.getBody().get(0).getId());
-            assertEquals(Float.valueOf(1.0f), response.getBody().get(0).getRate());
-            verify(rateController, times(1)).getRates();
-        }
-        catch (ResourceNotFoundException ex) {
-            fail();
-        }
-    }
-
-    @Test(expected = ResourceNotFoundException.class)
-    public void testGetRatesNotFound() throws ResourceNotFoundException {
-        when(rateController.getRates()).thenThrow(new ResourceNotFoundException());
+    public void testGetRatesOk() {
+        when(rateController.getRates()).thenReturn(testRates);
         ResponseEntity<List<Rate>> response = rateWebController.getRates();
+        assertEquals(HttpStatus.OK,response.getStatusCode());
+        assertEquals(1, Objects.requireNonNull(response.getBody()).size());
+        assertEquals(Integer.valueOf(1), response.getBody().get(0).getId());
+        assertEquals(Float.valueOf(1.0f), response.getBody().get(0).getRate());
+        verify(rateController, times(1)).getRates();
     }
 }

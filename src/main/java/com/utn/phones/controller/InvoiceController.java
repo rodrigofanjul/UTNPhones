@@ -20,7 +20,7 @@ public class InvoiceController {
         this.invoiceService = invoiceService;
     }
 
-    public List<Invoice> getInvoices() throws ResourceNotFoundException {
+    public List<Invoice> getInvoices() {
         return invoiceService.getAll();
     }
 

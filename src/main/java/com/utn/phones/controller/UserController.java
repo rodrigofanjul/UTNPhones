@@ -19,7 +19,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    public List<User> getUsers() throws ResourceNotFoundException {
+    public List<User> getUsers() {
         return userService.getAll();
     }
 

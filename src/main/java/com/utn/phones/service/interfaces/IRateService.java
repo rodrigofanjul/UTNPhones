@@ -6,5 +6,5 @@ import com.utn.phones.model.Rate;
 import java.util.List;
 
 public interface IRateService {
-    List<Rate> getAll() throws ResourceNotFoundException;
+    List<Rate> getAll();
 }

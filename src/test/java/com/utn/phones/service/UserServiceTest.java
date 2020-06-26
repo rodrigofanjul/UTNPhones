@@ -1,33 +1,29 @@
 package com.utn.phones.service;
 
+import com.sun.org.apache.regexp.internal.RE;
 import com.utn.phones.exception.ResourceAlreadyExistsException;
 import com.utn.phones.exception.ResourceNotFoundException;
 import com.utn.phones.model.City;
 import com.utn.phones.model.Province;
 import com.utn.phones.model.User;
-import static com.utn.phones.model.User.Role.*;
-
 import com.utn.phones.repository.IUserRepository;
-
 import com.utn.phones.service.interfaces.ICityService;
-import com.utn.phones.service.interfaces.IProvinceService;
-import org.junit.Test;
 import org.junit.Before;
+import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
-
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static com.utn.phones.model.User.Role.EMPLOYEE;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
 
     IUserRepository userRepository;
     ICityService cityService;
-    IProvinceService provinceService;
     BCryptPasswordEncoder bCryptPasswordEncoder;
     UserService userService;
 
@@ -39,18 +35,17 @@ public class UserServiceTest {
     public void setUp() {
         userRepository = mock(IUserRepository.class);
         cityService = mock(ICityService.class);
-        provinceService = mock(IProvinceService.class);
         bCryptPasswordEncoder = mock(BCryptPasswordEncoder.class);
-        userService = new UserService(userRepository,cityService,provinceService,bCryptPasswordEncoder);
+        userService = new UserService(userRepository,cityService,bCryptPasswordEncoder);
 
         testUser = new User();
         testUser = new User(1,new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223),"nombre","apellido",123,"123", EMPLOYEE);
         testUser2 = new User(2,new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223),"nombre","apellido",123,"123", EMPLOYEE);
-        testUsers = Arrays.asList(testUser);
+        testUsers = Collections.singletonList(testUser);
     }
 
     @Test
-    public void testGetAllOk() throws ResourceNotFoundException {
+    public void testGetAllOk() {
         when(userRepository.findAll()).thenReturn(testUsers);
 
         List<User> users = userService.getAll();
@@ -59,12 +54,6 @@ public class UserServiceTest {
         assertEquals(Integer.valueOf(1), users.get(0).getId());
         assertEquals(Integer.valueOf(123), users.get(0).getIdcard());
         verify(userRepository, times(1)).findAll();
-    }
-
-    @Test(expected = ResourceNotFoundException.class)
-    public void testGetAllNotFound() throws ResourceNotFoundException {
-        when(userRepository.findAll()).thenReturn(null);
-        List<User> users = userService.getAll();
     }
 
     @Test
@@ -80,8 +69,8 @@ public class UserServiceTest {
 
     @Test(expected = ResourceNotFoundException.class)
     public void testGetByIdNotFound() throws ResourceNotFoundException {
-        when(userRepository.findById(1)).thenReturn(Optional.ofNullable(null));
-        User user = userService.getById(1);
+        when(userRepository.findById(1)).thenReturn(Optional.empty());
+        userService.getById(1);
     }
 
     @Test
@@ -98,7 +87,7 @@ public class UserServiceTest {
     @Test(expected = ResourceNotFoundException.class)
     public void testGetByIdCardNotFound() throws ResourceNotFoundException {
         when(userRepository.findByIdcard(123)).thenReturn(null);
-        User user = userService.getById(123);
+        userService.getByIdCard(123);
     }
 
     @Test
@@ -118,13 +107,13 @@ public class UserServiceTest {
     public void testNewUserNotFound() throws ResourceNotFoundException, ResourceAlreadyExistsException {
         when(userRepository.findByIdcard(testUser.getIdcard())).thenReturn(null);
         when(cityService.getById(testUser.getCity().getId())).thenThrow(new ResourceNotFoundException());
-        User user = userService.newUser(testUser);
+        userService.newUser(testUser);
     }
 
     @Test(expected = ResourceAlreadyExistsException.class)
     public void testNewUserAlreadyExists() throws ResourceNotFoundException, ResourceAlreadyExistsException {
         when(userRepository.findByIdcard(testUser.getIdcard())).thenReturn(testUser);
-        User user = userService.newUser(testUser);
+        userService.newUser(testUser);
     }
 
     @Test
@@ -145,26 +134,21 @@ public class UserServiceTest {
     @Test(expected = ResourceNotFoundException.class)
     public void testUpdateUserNotFound() throws ResourceNotFoundException, ResourceAlreadyExistsException {
         when(userRepository.existsById(testUser.getId())).thenReturn(false);
-        User user = userService.updateUser(testUser);
+        userService.updateUser(testUser);
     }
 
     @Test(expected = ResourceAlreadyExistsException.class)
     public void testUpdateUserAlreadyExists() throws ResourceNotFoundException, ResourceAlreadyExistsException {
         when(userRepository.existsById(testUser.getId())).thenReturn(true);
         when(userRepository.findByIdcard(testUser.getIdcard())).thenReturn(testUser2);
-        User user = userService.updateUser(testUser);
+        userService.updateUser(testUser);
     }
 
     @Test
     public void testDeleteUserOk() throws ResourceNotFoundException {
-        try {
-            when(userRepository.existsById(1)).thenReturn(true);
-            userService.deleteUser(testUser);
-            verify(userRepository, times(1)).delete(testUser);
-        }
-        catch (ResourceNotFoundException ex) {
-            fail();
-        }
+        when(userRepository.existsById(1)).thenReturn(true);
+        userService.deleteUser(testUser);
+        verify(userRepository, times(1)).delete(testUser);
     }
 
     @Test(expected = ResourceNotFoundException.class)

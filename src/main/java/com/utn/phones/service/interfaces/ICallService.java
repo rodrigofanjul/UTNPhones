@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface ICallService {
-    List<Call> getAll() throws ResourceNotFoundException;
+    List<Call> getAll();
     List<Call> getByPhoneline(Phoneline phoneline) throws ResourceNotFoundException;
     List<Call> getByUser(User user) throws ResourceNotFoundException;
     List<Call> getByPhonelineBetween(Phoneline phoneline, Date start, Date end) throws ResourceNotFoundException;

@@ -2,8 +2,6 @@ package com.utn.phones.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,12 +10,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.lang.annotation.Target;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import static com.utn.phones.security.SecurityConstants.*;
+import static com.utn.phones.security.SecurityConstants.LOGIN_URL;
 
 
 @Configuration
@@ -35,18 +33,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    public BCryptPasswordEncoder bCryptPasswordEncoder() { return new BCryptPasswordEncoder(); }
 
     @Bean
     public SecurityProvider securityProvider() { return new SecurityProvider(); }
 
-    @Target(ElementType.METHOD)
-    @Retention(RetentionPolicy.RUNTIME)
-    @PreAuthorize("hasAuthority('USER')")
-    public @interface IsUser {
-    }
+//    @Target(ElementType.METHOD)
+//    @Retention(RetentionPolicy.RUNTIME)
+//    @PreAuthorize("hasAuthority('USER')")
+//    public @interface IsUser {
+//    }
 
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
@@ -60,11 +56,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public @interface IsInfraestructure {
     }
 
-    @Target(ElementType.METHOD)
-    @Retention(RetentionPolicy.RUNTIME)
-    @PreAuthorize("hasAuthority('USER') OR hasAuthority('EMPLOYEE')")
-    public @interface IsUserOrEmployee {
-    }
+//    @Target(ElementType.METHOD)
+//    @Retention(RetentionPolicy.RUNTIME)
+//    @PreAuthorize("hasAuthority('USER') OR hasAuthority('EMPLOYEE')")
+//    public @interface IsUserOrEmployee {
+//    }
 
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
@@ -72,11 +68,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public @interface IsSelfUserOrEmployee {
     }
 
-    @Target(ElementType.METHOD)
-    @Retention(RetentionPolicy.RUNTIME)
-    @PreAuthorize("@SecurityService.isSelfPhoneline(authentication, #id)")
-    public @interface IsSelfPhoneline {
-    }
+//    @Target(ElementType.METHOD)
+//    @Retention(RetentionPolicy.RUNTIME)
+//    @PreAuthorize("@SecurityService.isSelfPhoneline(authentication, #id)")
+//    public @interface IsSelfPhoneline {
+//    }
 
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)

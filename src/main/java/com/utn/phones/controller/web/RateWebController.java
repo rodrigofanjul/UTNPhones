@@ -28,7 +28,7 @@ public class RateWebController {
 
     @IsEmployee
     @GetMapping
-    public ResponseEntity<List<Rate>> getRates() throws ResourceNotFoundException {
+    public ResponseEntity<List<Rate>> getRates() {
         List<Rate> rates = rateController.getRates();
         return (rates.size() > 0) ? ResponseEntity.ok(rates) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

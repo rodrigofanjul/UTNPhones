@@ -22,9 +22,8 @@ public class PhonelineService implements IPhonelineService {
         this.phonelineRepository = phonelineRepository;
     }
 
-    public List<Phoneline> getAll() throws ResourceNotFoundException {
-        return Optional.ofNullable(phonelineRepository.findAll())
-                .orElseThrow(() -> new ResourceNotFoundException());
+    public List<Phoneline> getAll() {
+        return phonelineRepository.findAll();
     }
 
     public Phoneline getById(Long id) throws ResourceNotFoundException {

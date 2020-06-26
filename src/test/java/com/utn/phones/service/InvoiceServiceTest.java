@@ -1,15 +1,13 @@
 package com.utn.phones.service;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.utn.phones.exception.ResourceNotFoundException;
 import com.utn.phones.model.*;
-import com.utn.phones.repository.ICallRepository;
 import com.utn.phones.repository.IInvoiceRepository;
 import com.utn.phones.service.interfaces.IPhonelineService;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -39,13 +37,13 @@ public class InvoiceServiceTest {
 
         testDate = new Date();
         testUser = new User(1,new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223),"nombre","apellido",123,"123", EMPLOYEE);
-        testPhoneline = new Phoneline(1l,testUser,testUser.getCity(),MOBILE,ACTIVE);
+        testPhoneline = new Phoneline(1L,testUser,testUser.getCity(),MOBILE,ACTIVE);
         testInvoice = new Invoice(1,testPhoneline,1,1.0f,1.21f,testDate,false,testDate);
-        testInvoices = Arrays.asList(testInvoice);
+        testInvoices = Collections.singletonList(testInvoice);
     }
 
     @Test
-    public void testGetAllOk() throws ResourceNotFoundException {
+    public void testGetAllOk() {
         when(invoiceRepository.findAll()).thenReturn(testInvoices);
 
         List<Invoice> invoices = invoiceService.getAll();
@@ -57,15 +55,9 @@ public class InvoiceServiceTest {
         assertEquals(Float.valueOf(1.0f), invoices.get(0).getCostPrice());
         assertEquals(Float.valueOf(1.21f), invoices.get(0).getTotalPrice());
         assertEquals(testDate, invoices.get(0).getDate());
-        assertEquals(Boolean.valueOf(false), invoices.get(0).getIsPaid());
+        assertEquals(Boolean.FALSE, invoices.get(0).getIsPaid());
         assertEquals(testDate, invoices.get(0).getExpirationDate());
         verify(invoiceRepository, times(1)).findAll();
-    }
-
-    @Test(expected = ResourceNotFoundException.class)
-    public void testGetAllNotFound() throws ResourceNotFoundException {
-        when(invoiceRepository.findAll()).thenReturn(null);
-        List<Invoice> invoices = invoiceService.getAll();
     }
 
     @Test
@@ -81,7 +73,7 @@ public class InvoiceServiceTest {
         assertEquals(Float.valueOf(1.0f), invoices.get(0).getCostPrice());
         assertEquals(Float.valueOf(1.21f), invoices.get(0).getTotalPrice());
         assertEquals(testDate, invoices.get(0).getDate());
-        assertEquals(Boolean.valueOf(false), invoices.get(0).getIsPaid());
+        assertEquals(Boolean.FALSE, invoices.get(0).getIsPaid());
         assertEquals(testDate, invoices.get(0).getExpirationDate());
         verify(invoiceRepository, times(1)).findByPhonelineIn(phonelineService.getByUser(testUser));
     }
@@ -89,7 +81,7 @@ public class InvoiceServiceTest {
     @Test(expected = ResourceNotFoundException.class)
     public void testGetByUserNotFound() throws ResourceNotFoundException {
         when(invoiceRepository.findByPhonelineIn(phonelineService.getByUser(testUser))).thenReturn(null);
-        List<Invoice> invoices = invoiceService.getByUser(testUser);
+        invoiceService.getByUser(testUser);
     }
 
     @Test
@@ -105,7 +97,7 @@ public class InvoiceServiceTest {
         assertEquals(Float.valueOf(1.0f), invoices.get(0).getCostPrice());
         assertEquals(Float.valueOf(1.21f), invoices.get(0).getTotalPrice());
         assertEquals(testDate, invoices.get(0).getDate());
-        assertEquals(Boolean.valueOf(false), invoices.get(0).getIsPaid());
+        assertEquals(Boolean.FALSE, invoices.get(0).getIsPaid());
         assertEquals(testDate, invoices.get(0).getExpirationDate());
         verify(invoiceRepository, times(1)).findByPhonelineInAndDateBetween(phonelineService.getByUser(testUser),testDate,testDate);
     }
@@ -113,6 +105,6 @@ public class InvoiceServiceTest {
     @Test(expected = ResourceNotFoundException.class)
     public void testGetByUserBetweenNotFound() throws ResourceNotFoundException {
         when(invoiceRepository.findByPhonelineInAndDateBetween(phonelineService.getByUser(testUser),testDate,testDate)).thenReturn(null);
-        List<Invoice> invoices = invoiceService.getByUserBetween(testUser,testDate,testDate);
+        invoiceService.getByUserBetween(testUser, testDate, testDate);
     }
 }

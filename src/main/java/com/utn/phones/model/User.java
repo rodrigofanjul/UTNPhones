@@ -38,7 +38,7 @@ public class User {
     private String password;
 
     public enum Role {
-        USER, EMPLOYEE, INFRAESTRUCTURE;
+        USER, EMPLOYEE, INFRAESTRUCTURE
     }
 
     @Enumerated(EnumType.STRING)

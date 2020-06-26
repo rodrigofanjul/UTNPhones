@@ -25,9 +25,8 @@ public class InvoiceService implements IInvoiceService {
         this.phonelineService = phonelineService;
     }
 
-    public List<Invoice> getAll() throws ResourceNotFoundException {
-        return Optional.ofNullable(invoiceRepository.findAll())
-                .orElseThrow(() -> new ResourceNotFoundException());
+    public List<Invoice> getAll() {
+        return invoiceRepository.findAll();
     }
 
     public List<Invoice> getByUser(User user) throws ResourceNotFoundException {

@@ -5,7 +5,6 @@ import com.utn.phones.exception.ResourceNotFoundException;
 import com.utn.phones.model.User;
 import com.utn.phones.repository.IUserRepository;
 import com.utn.phones.service.interfaces.ICityService;
-import com.utn.phones.service.interfaces.IProvinceService;
 import com.utn.phones.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,20 +18,17 @@ public class UserService implements IUserService {
 
     private final IUserRepository userRepository;
     private final ICityService cityService;
-    private final IProvinceService provinceService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserService(IUserRepository userRepository, ICityService cityService, IProvinceService provinceService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(IUserRepository userRepository, ICityService cityService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.cityService = cityService;
-        this.provinceService = provinceService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public List<User> getAll() throws ResourceNotFoundException {
-        return Optional.ofNullable(userRepository.findAll())
-                .orElseThrow(() -> new ResourceNotFoundException());
+    public List<User> getAll() {
+        return userRepository.findAll();
     }
 
     public User getById(int id) throws ResourceNotFoundException {
@@ -57,7 +53,7 @@ public class UserService implements IUserService {
         if(!userRepository.existsById(user.getId()))
             throw new ResourceNotFoundException("Resource User not found with (id:%d)",user.getId());
         User u = userRepository.findByIdcard(user.getIdcard());
-        if(u != null && u.getId() != user.getId())
+        if(u != null && !u.getId().equals(user.getId()))
             throw new ResourceAlreadyExistsException("Resource User already exists with (idCard:%d)", user.getIdcard());
         if(user.getPassword() != null) user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setCity(cityService.getById(user.getCity().getId()));

@@ -1,6 +1,5 @@
 package com.utn.phones.controller;
 
-import com.utn.phones.exception.ResourceNotFoundException;
 import com.utn.phones.model.Rate;
 import com.utn.phones.service.interfaces.IRateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ public class RateController {
         this.rateService = rateService;
     }
 
-    public List<Rate> getRates() throws ResourceNotFoundException {
+    public List<Rate> getRates() {
         return rateService.getAll();
     }
 }

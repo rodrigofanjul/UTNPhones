@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -43,8 +42,9 @@ public class UserWebController {
 
     @IsEmployee
     @GetMapping
-    public ResponseEntity<List<User>> getUsers() throws ResourceNotFoundException {
-        return ResponseEntity.ok(userController.getUsers());
+    public ResponseEntity<List<User>> getUsers() {
+        List<User> users = userController.getUsers();
+        return (users.size() > 0) ? ResponseEntity.ok(users) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @IsSelfUserOrEmployee
@@ -56,31 +56,36 @@ public class UserWebController {
     @IsSelfUserOrEmployee
     @GetMapping("/{id}/calls")
     public ResponseEntity<List<Call>> getUserCalls(@Validated @PathVariable @Min(1) int id) throws ResourceNotFoundException {
-        return ResponseEntity.ok(callController.getCallsByUser(userController.getUser(id)));
+        List<Call> calls = callController.getCallsByUser(userController.getUser(id));
+        return (calls.size() > 0) ? ResponseEntity.ok(calls) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @IsSelfUserOrEmployee
     @GetMapping("/{id}/calls/between")
     public ResponseEntity<List<Call>> getUserCallsBetween(@Validated @PathVariable @Min(1) int id, @RequestParam Date start, @RequestParam Date end) throws ResourceNotFoundException {
-        return ResponseEntity.ok(callController.getCallsByUserBetween(userController.getUser(id),start,end));
+        List<Call> calls = callController.getCallsByUserBetween(userController.getUser(id),start,end);
+        return (calls.size() > 0) ? ResponseEntity.ok(calls) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @IsSelfUserOrEmployee
     @GetMapping("/{id}/calls/most-called")
     public ResponseEntity<List<MostCalledDto>> getCallsByUserMostCalled(@Validated @PathVariable @Min(1) int id) throws ResourceNotFoundException {
-        return ResponseEntity.ok(callController.getCallsByUserMostCalled(userController.getUser(id)));
+        List<MostCalledDto> mostCalled = callController.getCallsByUserMostCalled(userController.getUser(id));
+        return (mostCalled.size() > 0) ? ResponseEntity.ok(mostCalled) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @IsSelfUserOrEmployee
     @GetMapping("/{id}/invoices")
     public ResponseEntity<List<Invoice>> getUserInvoices(@Validated @PathVariable @Min(1) int id) throws ResourceNotFoundException {
-        return ResponseEntity.ok(invoiceController.getInvoicesByUser(userController.getUser(id)));
+        List<Invoice> invoices = invoiceController.getInvoicesByUser(userController.getUser(id));
+        return (invoices.size() > 0) ? ResponseEntity.ok(invoices) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @IsSelfUserOrEmployee
     @GetMapping("/{id}/invoices/between")
     public ResponseEntity<List<Invoice>> getUserInvoicesBetween(@Validated @PathVariable @Min(1) int id, @RequestParam Date start, @RequestParam Date end) throws ResourceNotFoundException {
-        return ResponseEntity.ok(invoiceController.getInvoicesByUserBetween(userController.getUser(id),start,end));
+        List<Invoice> invoices = invoiceController.getInvoicesByUserBetween(userController.getUser(id),start,end);
+        return (invoices.size() > 0) ? ResponseEntity.ok(invoices) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping
@@ -96,7 +101,7 @@ public class UserWebController {
 
     @IsEmployee
     @DeleteMapping
-    public ResponseEntity deleteUser(@Valid @RequestBody @NotNull User user) throws ResourceNotFoundException {
+    public ResponseEntity<Object> deleteUser(@Valid @RequestBody @NotNull User user) throws ResourceNotFoundException {
         userController.deleteUser(user);
         return ResponseEntity.noContent().build();
     }

@@ -8,7 +8,7 @@ import com.utn.phones.repository.IRateRepository;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -29,11 +29,11 @@ public class RateServiceTest {
 
         testCity = new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223);
         testRate = new Rate(1,testCity,testCity,1.0f);
-        testRates = Arrays.asList(testRate);
+        testRates = Collections.singletonList(testRate);
     }
 
     @Test
-    public void testGetAllOk() throws ResourceNotFoundException {
+    public void testGetAllOk() {
         when(rateRepository.findAll()).thenReturn(testRates);
 
         List<Rate> rates = rateService.getAll();
@@ -45,11 +45,5 @@ public class RateServiceTest {
         assertEquals(testCity, rates.get(0).getDestination());
         assertEquals(Float.valueOf(1.0f), rates.get(0).getRate());
         verify(rateRepository, times(1)).findAll();
-    }
-
-    @Test(expected = ResourceNotFoundException.class)
-    public void testGetAllNotFound() throws ResourceNotFoundException {
-        when(rateRepository.findAll()).thenReturn(null);
-        List<Rate> rates = rateService.getAll();
     }
 }

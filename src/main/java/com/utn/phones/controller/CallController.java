@@ -22,7 +22,7 @@ public class CallController {
         this.callService = callService;
     }
 
-    public List<Call> getCalls() throws ResourceNotFoundException {
+    public List<Call> getCalls() {
         return callService.getAll();
     }
 

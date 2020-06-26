@@ -27,7 +27,7 @@ public class Phoneline {
     private City city;
 
     public enum Type {
-        MOBILE, LANDLINE;
+        MOBILE, LANDLINE
     }
 
     @Enumerated(EnumType.STRING)
@@ -36,7 +36,7 @@ public class Phoneline {
     private Type type;
 
     public enum Status {
-        ACTIVE, SUSPENDED, CANCELLED;
+        ACTIVE, SUSPENDED, CANCELLED
     }
 
     @Enumerated(EnumType.STRING)

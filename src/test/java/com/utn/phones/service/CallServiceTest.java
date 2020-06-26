@@ -8,7 +8,7 @@ import com.utn.phones.service.interfaces.IPhonelineService;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -41,17 +41,17 @@ public class CallServiceTest {
 
         testDate = new Date();
         testUser = new User(1,new City(1,new Province(1,"Buenos Aires"),"Mar del Plata",223),"nombre","apellido",123,"123", EMPLOYEE);
-        testPhonelineOrigin = new Phoneline(1l,testUser,testUser.getCity(),MOBILE,ACTIVE);
-        testPhonelineDestination = new Phoneline(2l,testUser,testUser.getCity(),MOBILE,ACTIVE);
+        testPhonelineOrigin = new Phoneline(1L,testUser,testUser.getCity(),MOBILE,ACTIVE);
+        testPhonelineDestination = new Phoneline(2L,testUser,testUser.getCity(),MOBILE,ACTIVE);
         testInvoice = new Invoice(1,testPhonelineOrigin,1,1f,1.21f,testDate,false,testDate);
         testCall = new Call(1,testInvoice,testPhonelineOrigin,testPhonelineDestination,testDate,1.0f,10,1.0f);
-        testCalls = Arrays.asList(testCall);
-        testMostCalledDto = new MostCalledDto(1l,1l,1l);
-        testMostCalledDtos = Arrays.asList(testMostCalledDto);
+        testCalls = Collections.singletonList(testCall);
+        testMostCalledDto = new MostCalledDto(1L, 1L, 1L);
+        testMostCalledDtos = Collections.singletonList(testMostCalledDto);
     }
 
     @Test
-    public void testGetAllOk() throws ResourceNotFoundException {
+    public void testGetAllOk() {
         when(callRepository.findAll()).thenReturn(testCalls);
 
         List<Call> calls = callService.getAll();
@@ -67,12 +67,6 @@ public class CallServiceTest {
         assertEquals(Integer.valueOf(10), calls.get(0).getDuration());
         assertEquals(Float.valueOf(1.0f), calls.get(0).getPrice());
         verify(callRepository, times(1)).findAll();
-    }
-
-    @Test(expected = ResourceNotFoundException.class)
-    public void testGetAllNotFound() throws ResourceNotFoundException {
-        when(callRepository.findAll()).thenReturn(null);
-        List<Call> calls = callService.getAll();
     }
 
     @Test
@@ -96,7 +90,7 @@ public class CallServiceTest {
     @Test(expected = ResourceNotFoundException.class)
     public void testGetByUserNotFound() throws ResourceNotFoundException {
         when(callRepository.findByOriginIn(phonelineService.getByUser(testUser))).thenReturn(null);
-        List<Call> calls = callService.getByUser(testUser);
+        callService.getByUser(testUser);
     }
 
     @Test
@@ -120,7 +114,7 @@ public class CallServiceTest {
     @Test(expected = ResourceNotFoundException.class)
     public void testGetByPhonelineNotFound() throws ResourceNotFoundException {
         when(callRepository.findByOrigin(testPhonelineOrigin)).thenReturn(null);
-        List<Call> calls = callService.getByPhoneline(testPhonelineOrigin);
+        callService.getByPhoneline(testPhonelineOrigin);
     }
 
     @Test
@@ -144,7 +138,7 @@ public class CallServiceTest {
     @Test(expected = ResourceNotFoundException.class)
     public void testGetByUserBetweenNotFound() throws ResourceNotFoundException {
         when(callRepository.findByOriginInAndDateBetween(phonelineService.getByUser(testUser),testDate,testDate)).thenReturn(null);
-        List<Call> calls = callService.getByUserBetween(testUser,testDate,testDate);
+        callService.getByUserBetween(testUser, testDate, testDate);
     }
 
     @Test
@@ -168,7 +162,7 @@ public class CallServiceTest {
     @Test(expected = ResourceNotFoundException.class)
     public void testGetByPhonelineBetweenNotFound() throws ResourceNotFoundException {
         when(callRepository.findByOriginAndDateBetween(testPhonelineOrigin,testDate,testDate)).thenReturn(null);
-        List<Call> calls = callService.getByPhonelineBetween(testPhonelineOrigin,testDate,testDate);
+        callService.getByPhonelineBetween(testPhonelineOrigin, testDate, testDate);
     }
 
     @Test
@@ -187,7 +181,7 @@ public class CallServiceTest {
     @Test(expected = ResourceNotFoundException.class)
     public void testGetByUserMostCalledNotFound() throws ResourceNotFoundException {
         when(callRepository.findTopByOriginInOrderByDestinationCountDesc(phonelineService.getByUser(testUser))).thenReturn(null);
-        List<MostCalledDto> calls = callService.getByUserMostCalled(testUser);
+        callService.getByUserMostCalled(testUser);
     }
 
     @Test
@@ -206,13 +200,13 @@ public class CallServiceTest {
     @Test(expected = ResourceNotFoundException.class)
     public void testGetByPhonelineMostCalledNotFound() throws ResourceNotFoundException {
         when(callRepository.findTopByOriginOrderByDestinationCountDesc(testPhonelineOrigin)).thenReturn(null);
-        List<MostCalledDto> calls = callService.getByPhonelineMostCalled(testPhonelineOrigin);
+        callService.getByPhonelineMostCalled(testPhonelineOrigin);
     }
 
     @Test
     public void testNewCallOk() throws ResourceNotFoundException {
-        when(phonelineService.getById(1l)).thenReturn(testPhonelineOrigin);
-        when(phonelineService.getById(2l)).thenReturn(testPhonelineDestination);
+        when(phonelineService.getById(1L)).thenReturn(testPhonelineOrigin);
+        when(phonelineService.getById(2L)).thenReturn(testPhonelineDestination);
         when(callRepository.save(testCall)).thenReturn(testCall);
 
         Call call = callService.newCall(testCall);
@@ -225,14 +219,14 @@ public class CallServiceTest {
         assertEquals(Float.valueOf(1.0f), call.getRate());
         assertEquals(Integer.valueOf(10), call.getDuration());
         assertEquals(Float.valueOf(1.0f), call.getPrice());
-        verify(phonelineService,times(1)).getById(1l);
-        verify(phonelineService,times(1)).getById(2l);
+        verify(phonelineService,times(1)).getById(1L);
+        verify(phonelineService,times(1)).getById(2L);
         verify(callRepository, times(1)).save(testCall);
     }
 
     @Test(expected = ResourceNotFoundException.class)
     public void testNewCallNotFound() throws ResourceNotFoundException {
         when(phonelineService.getById(testCall.getOrigin().getId())).thenThrow(new ResourceNotFoundException());
-        Call call = callService.newCall(testCall);
+        callService.newCall(testCall);
     }
 }

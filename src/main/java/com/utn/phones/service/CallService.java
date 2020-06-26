@@ -31,9 +31,8 @@ public class CallService implements ICallService {
     }
 
     @Cacheable
-    public List<Call> getAll() throws ResourceNotFoundException {
-        return Optional.ofNullable(callRepository.findAll())
-                .orElseThrow(() -> new ResourceNotFoundException());
+    public List<Call> getAll() {
+        return callRepository.findAll();
     }
 
     @Cacheable

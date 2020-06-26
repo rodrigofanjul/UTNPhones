@@ -8,7 +8,7 @@ import com.utn.phones.model.User;
 import java.util.List;
 
 public interface IPhonelineService {
-    List<Phoneline> getAll() throws ResourceNotFoundException;
+    List<Phoneline> getAll();
     Phoneline getById(Long id) throws ResourceNotFoundException;
     List<Phoneline> getByUser(User user) throws ResourceNotFoundException;
     Phoneline newPhoneline(Phoneline phoneline) throws ResourceAlreadyExistsException;

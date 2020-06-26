@@ -4,7 +4,6 @@ import com.utn.phones.exception.ResourceNotFoundException;
 import com.utn.phones.model.City;
 import com.utn.phones.model.Province;
 import com.utn.phones.repository.ICityRepository;
-import com.utn.phones.repository.IProvinceRepository;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,7 +45,7 @@ public class CityServiceTest {
 
     @Test(expected = ResourceNotFoundException.class)
     public void testGetByIdNotFound() throws ResourceNotFoundException {
-        when(cityRepository.findById(1)).thenReturn(Optional.ofNullable(null));
-        City city = cityService.getById(1);
+        when(cityRepository.findById(1)).thenReturn(Optional.empty());
+        cityService.getById(1);
     }
 }
