@@ -1,0 +1,122 @@
+/** Database = Database
+* Collection = Table
+* Document = Row
+* Field = Column
+* Value = Value
+*/
+
+USE UTNPhones;
+
+db.provinces.InsertOne(
+{
+	"id": 1, 
+	"province_name": "Buenos Aires"
+});
+
+db.cities.InsertOne(
+{
+    "id": 1,
+    "province": { "id": 1, "province_name": "Buenos Aires" },
+    "city_name": "Mar del Plata",
+    "city_prefix": 223
+});
+
+
+db.rates.InsertOne({
+  "id": 1,
+  "origin_city":
+  {  
+    "id": 1,
+    "province": { "id": 1, "province_name": "Buenos Aires" },
+    "city_name": "Mar del Plata",
+    "city_prefix": 223
+  },
+  "destination_city":
+  {  
+    "id": 1,
+    "province": { "id": 1, "province_name": "Buenos Aires" },
+    "city_name": "Mar del Plata",
+    "city_prefix": 223
+  },
+  "rate_per_minute": 1.21
+});
+
+db.users.InsertOne({
+	"name": "Rodrigo",
+	"lastname": "Fanjul",
+	"idcard": 3231123,
+	"password": 123,
+	"role": "EMPLOYEE",
+	"city":
+	{
+		"id": 1,
+		"province": { "id": 1, "province_name": "Buenos Aires" },
+		"city_name": "Mar del Plata",
+		"city_prefix": 223
+	}
+});
+
+db.phonelines.InsertOne({
+	"id": 2235628837,
+	"user":
+	{
+		"name": "Rodrigo",
+		"lastname": "Fanjul",
+		"idcard": 3231123,
+		"password": 123,
+		"role": "EMPLOYEE",
+		"city":
+		{
+			"id": 1,
+			"province": { "id": 1, "province_name": "Buenos Aires" },
+			"city_name": "Mar del Plata",
+			"city_prefix": 223
+		}
+	},
+	"city":
+	{
+		"id": 1,
+		"province": { "id": 1, "province_name": "Buenos Aires" },
+		"city_name": "Mar del Plata",
+		"city_prefix": 223
+	},
+	"type": "MOBILE",
+	"status": "ACTIVE"
+});
+
+db.invoices.InsertOne({
+	"id": 1,
+    "phoneline": {
+		"id": 2235628837,
+		"user":
+		{
+			"name": "Rodrigo",
+			"lastname": "Fanjul",
+			"idcard": 3231123,
+			"password": 123,
+			"role": "EMPLOYEE",
+			"city":
+			{
+				"id": 1,
+				"province": { "id": 1, "province_name": "Buenos Aires" },
+				"city_name": "Mar del Plata",
+				"city_prefix": 223
+			}
+		},
+		"city":
+		{
+			"id": 1,
+			"province": { "id": 1, "province_name": "Buenos Aires" },
+			"city_name": "Mar del Plata",
+			"city_prefix": 223
+		},
+		"type": "MOBILE",
+		"status": "ACTIVE"
+	},
+    "invoice_calls_quantity": 1,
+    "invoice_cost_price": 1.1,
+    "invoice_totalprice": 1.1,
+    "invoice_date": 0,
+    "invoice_is_paid": 0,
+    "invoice_expiration_date": 0
+});
